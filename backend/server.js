@@ -328,10 +328,11 @@ app.put("/riderClosePost/:userID", async (req, res) => {
 app.get("/userList", async (req, res) => {
   try {
     const { locationDestination } = req.query;
-    let sql = "SELECT * FROM post";
+    let sql =
+      "SELECT post.*, users.name FROM post JOIN users ON post.userID = users.userID";
 
     if (locationDestination) {
-      sql += " WHERE locationDestination = ?";
+      sql += " WHERE post.locationDestination = ?";
     }
 
     connection.query(sql, [locationDestination], (err, results) => {
@@ -353,6 +354,7 @@ app.get("/userList", async (req, res) => {
     });
   }
 });
+
 // endpoint: /userList
 
 // PostDetail
