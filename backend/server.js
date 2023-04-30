@@ -40,7 +40,7 @@ app.post("/register", async (req, res) => {
       });
     } else if (results.length > 0) {
       return res.status(400).json({
-        status: "False",
+        status: False,
         message: "Email already exists",
       });
     } else {
@@ -56,7 +56,7 @@ app.post("/register", async (req, res) => {
               });
             } else {
               return res.status(200).json({
-                status: "True",
+                status: True,
                 message: "User created",
               });
             }
@@ -81,7 +81,7 @@ app.post("/login", async (req, res) => {
     }
     if (results.length == 0) {
       return res.status(200).json({
-        status: "False",
+        status: False,
       });
     } else {
       const hashedPassword = results[0].password;
@@ -98,7 +98,7 @@ app.post("/login", async (req, res) => {
                 });
               } else {
                 return res.status(200).json({
-                  status: "True",
+                  status: True,
                   data: results[0],
                 });
               }
@@ -111,7 +111,7 @@ app.post("/login", async (req, res) => {
           }
         } else {
           return res.status(200).json({
-            status: "False",
+            status: False,
           });
         }
       });
@@ -131,14 +131,14 @@ app.put("/settings/:userID", async (req, res) => {
     connection.execute(sqlSelect, [userID], async (error, results) => {
       if (error) {
         return res.status(500).json({
-          status: "False",
+          status: False,
           message: "Database error",
         });
       }
 
       if (results.length === 0) {
         return res.status(404).json({
-          status: "False",
+          status: False,
           message: "User not found",
         });
       }
@@ -166,7 +166,7 @@ app.put("/settings/:userID", async (req, res) => {
       }
 
       return res.status(200).json({
-        status: "True",
+        status: True,
         message: "User profile updated successfully",
         user: user,
       });
@@ -174,7 +174,7 @@ app.put("/settings/:userID", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({
-      status: "False",
+      status: False,
       message: "Server error",
     });
   }
@@ -211,13 +211,13 @@ app.put("/riderRegister/:userID", async (req, res) => {
     (err, results) => {
       if (err) {
         res.status(500).json({
-          status: "False",
+          status: False,
           message: err.message,
         });
         return;
       } else {
         res.status(200).json({
-          status: "True",
+          status: True,
           message: "Success",
           data: results,
         });
@@ -239,19 +239,19 @@ app.post("/riderPost/:userID", async (req, res) => {
   connection.execute(sqlCheckUser, [userID], (err, result) => {
     if (err) {
       res.status(500).json({
-        status: "False",
+        status: False,
         message: err.message,
       });
     } else if (result.length === 0) {
       res.status(400).json({
-        status: "False",
+        status: False,
         message: "User not found",
       });
     } else {
       connection.beginTransaction((err) => {
         if (err) {
           res.status(500).json({
-            status: "False",
+            status: False,
             message: err.message,
           });
           return;
@@ -261,7 +261,7 @@ app.post("/riderPost/:userID", async (req, res) => {
           if (err) {
             return connection.rollback(() => {
               res.status(500).json({
-                status: "False",
+                status: False,
                 message: err.message,
               });
             });
@@ -274,7 +274,7 @@ app.post("/riderPost/:userID", async (req, res) => {
               if (err) {
                 return connection.rollback(() => {
                   res.status(500).json({
-                    status: "False",
+                    status: False,
                     message: err.message,
                   });
                 });
@@ -283,13 +283,13 @@ app.post("/riderPost/:userID", async (req, res) => {
                 if (err) {
                   return connection.rollback(() => {
                     res.status(500).json({
-                      status: "False",
+                      status: False,
                       message: err.message,
                     });
                   });
                 }
                 res.status(200).json({
-                  status: "True",
+                  status: True,
                   message: "Success",
                   data: results,
                 });
@@ -329,7 +329,7 @@ app.get("/userList", async (req, res) => {
   try {
     const { locationDestination } = req.query;
     let sql =
-      "SELECT post.*, users.name FROM post JOIN users ON post.userID = users.userID";
+      "SELECT post.*, users.* FROM post JOIN users ON post.userID = users.userID";
 
     if (locationDestination) {
       sql += " WHERE post.locationDestination = ?";
@@ -358,7 +358,7 @@ app.get("/userList", async (req, res) => {
 // endpoint: /userList
 
 // PostDetail
-app.post("/PostDetail/:userID", async (req, res) => {
+app.get("/PostDetail/:userID", async (req, res) => {
   const { userID } = req.params;
   let sql = "SELECT * FROM users WHERE userID =?";
   connection.query(sql, [userID], (err, users) => {
@@ -393,5 +393,136 @@ app.post("/PostDetail/:userID", async (req, res) => {
 // endpoint: /PostDetail
 
 // /getNotificationRider
+app.get("/getNotificationRider/:userID", (req, res) => {
+  const { userID } = req.params;
 
+  const sql = "SELECT * FROM seat WHERE userID_rider = userID AND status = '0'";
+
+  connection.query(sql, [userID], (err, results) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "Success",
+      data: results,
+    });
+  });
+});
 // endpoint: /getNotificationRider
+
+// /postRequest
+app.post("/postRequest", (req, res) => {
+  const { userID_rider, userID } = req.body;
+
+  const checkSql =
+    "SELECT COUNT(*) as num_riders FROM seat WHERE userID_rider = ? AND status = 1";
+
+  connection.execute(checkSql, [userID_rider], (err, results) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+      });
+      return;
+    }
+
+    const numRiders = results[0].num_riders;
+
+    const getNumSeatSql = "SELECT seat FROM post WHERE userID = ?";
+
+    connection.execute(getNumSeatSql, [userID_rider], (err, results) => {
+      if (err) {
+        res.status(500).json({
+          message: err.message,
+        });
+        return;
+      }
+
+      const numSeat = results[0].seat;
+
+      if (numRiders >= numSeat) {
+        res.status(400).json({
+          status: False,
+          message: "Seat is full",
+        });
+        return;
+      }
+
+      const checkDuplicateSql = "SELECT * FROM seat WHERE userID = ?";
+
+      connection.execute(checkDuplicateSql, [userID], (err, results) => {
+        if (err) {
+          res.status(500).json({
+            message: err.message,
+          });
+          return;
+        }
+
+        if (results.length > 0) {
+          res.status(400).json({
+            status: False,
+            message: "Duplicate userID",
+          });
+          return;
+        }
+
+        const insertSql =
+          "INSERT INTO seat (userID_rider, userID) VALUES (?, ?)";
+
+        connection.execute(
+          insertSql,
+          [userID_rider, userID],
+          (err, results) => {
+            if (err) {
+              res.status(500).json({
+                message: err.message,
+              });
+              return;
+            }
+            res.status(200).json({
+              status: True,
+              message: "Success",
+              data: results,
+            });
+          }
+        );
+      });
+    });
+  });
+});
+
+// endpoint: /postRequest
+
+// /riderAccept
+app.put("/riderAccept", (req, res) => {
+  const { userID_rider, userID, status } = req.body;
+
+  const sql =
+    "UPDATE seat SET status = ? WHERE userID_rider = ? AND userID = ? AND status = '0'";
+
+  connection.execute(sql, [status, userID_rider, userID], (err, results) => {
+    if (err) {
+      res.status(500).json({
+        message: err.message,
+        success: false,
+      });
+      return;
+    }
+
+    if (results.affectedRows === 0) {
+      res.status(400).json({
+        message: "No seat available for this user",
+        success: false,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Success",
+      success: true,
+    });
+  });
+});
+// endpoint: /riderAccept
