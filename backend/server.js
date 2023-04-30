@@ -87,21 +87,28 @@ app.post("/login", async (req, res) => {
       const hashedPassword = results[0].password;
       bcrypt.compare(password, hashedPassword, (err, result) => {
         if (result) {
-          const userId = results[0].id;
-          sql = "SELECT * FROM users WHERE id = ?";
-          connection.execute(sql, [userId], (err, results) => {
-            if (err) {
-              return res.status(500).json({
-                status: "Error",
-                message: "Internal server error",
-              });
-            } else {
-              return res.status(200).json({
-                status: "True",
-                data: results[0],
-              });
-            }
-          });
+          const userID = results[0].userID;
+          if (userID) {
+            sql = "SELECT * FROM users WHERE userID = ?";
+            connection.execute(sql, [userID], (err, results) => {
+              if (err) {
+                return res.status(500).json({
+                  status: "Error",
+                  message: "Internal server error",
+                });
+              } else {
+                return res.status(200).json({
+                  status: "True",
+                  data: results[0],
+                });
+              }
+            });
+          } else {
+            return res.status(500).json({
+              status: "Error",
+              message: "User ID is undefined",
+            });
+          }
         } else {
           return res.status(200).json({
             status: "False",
