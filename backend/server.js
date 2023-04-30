@@ -40,7 +40,7 @@ app.post("/register", async (req, res) => {
       });
     } else if (results.length > 0) {
       return res.status(400).json({
-        status: False,
+        status: false,
         message: "Email already exists",
       });
     } else {
@@ -56,7 +56,7 @@ app.post("/register", async (req, res) => {
               });
             } else {
               return res.status(200).json({
-                status: True,
+                status: true,
                 message: "User created",
               });
             }
@@ -81,7 +81,7 @@ app.post("/login", async (req, res) => {
     }
     if (results.length == 0) {
       return res.status(200).json({
-        status: False,
+        status: false,
       });
     } else {
       const hashedPassword = results[0].password;
@@ -98,7 +98,7 @@ app.post("/login", async (req, res) => {
                 });
               } else {
                 return res.status(200).json({
-                  status: True,
+                  status: true,
                   data: results[0],
                 });
               }
@@ -111,7 +111,7 @@ app.post("/login", async (req, res) => {
           }
         } else {
           return res.status(200).json({
-            status: False,
+            status: false,
           });
         }
       });
@@ -131,14 +131,14 @@ app.put("/settings/:userID", async (req, res) => {
     connection.execute(sqlSelect, [userID], async (error, results) => {
       if (error) {
         return res.status(500).json({
-          status: False,
+          status: false,
           message: "Database error",
         });
       }
 
       if (results.length === 0) {
         return res.status(404).json({
-          status: False,
+          status: false,
           message: "User not found",
         });
       }
@@ -166,7 +166,7 @@ app.put("/settings/:userID", async (req, res) => {
       }
 
       return res.status(200).json({
-        status: True,
+        status: true,
         message: "User profile updated successfully",
         user: user,
       });
@@ -174,7 +174,7 @@ app.put("/settings/:userID", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({
-      status: False,
+      status: false,
       message: "Server error",
     });
   }
@@ -211,13 +211,13 @@ app.put("/riderRegister/:userID", async (req, res) => {
     (err, results) => {
       if (err) {
         res.status(500).json({
-          status: False,
+          status: false,
           message: err.message,
         });
         return;
       } else {
         res.status(200).json({
-          status: True,
+          status: true,
           message: "Success",
           data: results,
         });
@@ -239,19 +239,19 @@ app.post("/riderPost/:userID", async (req, res) => {
   connection.execute(sqlCheckUser, [userID], (err, result) => {
     if (err) {
       res.status(500).json({
-        status: False,
+        status: false,
         message: err.message,
       });
     } else if (result.length === 0) {
       res.status(400).json({
-        status: False,
+        status: false,
         message: "User not found",
       });
     } else {
       connection.beginTransaction((err) => {
         if (err) {
           res.status(500).json({
-            status: False,
+            status: false,
             message: err.message,
           });
           return;
@@ -261,7 +261,7 @@ app.post("/riderPost/:userID", async (req, res) => {
           if (err) {
             return connection.rollback(() => {
               res.status(500).json({
-                status: False,
+                status: false,
                 message: err.message,
               });
             });
@@ -274,7 +274,7 @@ app.post("/riderPost/:userID", async (req, res) => {
               if (err) {
                 return connection.rollback(() => {
                   res.status(500).json({
-                    status: False,
+                    status: false,
                     message: err.message,
                   });
                 });
@@ -283,13 +283,13 @@ app.post("/riderPost/:userID", async (req, res) => {
                 if (err) {
                   return connection.rollback(() => {
                     res.status(500).json({
-                      status: False,
+                      status: false,
                       message: err.message,
                     });
                   });
                 }
                 res.status(200).json({
-                  status: True,
+                  status: true,
                   message: "Success",
                   data: results,
                 });
@@ -444,7 +444,7 @@ app.post("/postRequest", (req, res) => {
 
       if (numRiders >= numSeat) {
         res.status(400).json({
-          status: False,
+          status: false,
           message: "Seat is full",
         });
         return;
@@ -462,7 +462,7 @@ app.post("/postRequest", (req, res) => {
 
         if (results.length > 0) {
           res.status(400).json({
-            status: False,
+            status: false,
             message: "Duplicate userID",
           });
           return;
@@ -482,7 +482,7 @@ app.post("/postRequest", (req, res) => {
               return;
             }
             res.status(200).json({
-              status: True,
+              status: true,
               message: "Success",
               data: results,
             });
