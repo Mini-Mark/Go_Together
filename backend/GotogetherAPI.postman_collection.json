@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "988c9a65-3055-440a-a5f3-0c124ef1ee03",
+		"name": "GotogetherAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24499440",
+		"_collection_link": "https://www.postman.com/flight-administrator-63998461/workspace/gotogetherapi/collection/24499440-988c9a65-3055-440a-a5f3-0c124ef1ee03?action=share&creator=24499440&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"5922040@kmitl.ac.th\",\r\n    \"password\" : \"1234\",\r\n    \"name\" : \"Mon\",\r\n    \"tel\" : \"0909528827\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"5922040@kmitl.ac.th\",\r\n    \"password\" : \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Settings",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tel\" : \"099012334\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/settings/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"settings",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Rider",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"brand\": \"honda\",\r\n        \"model\": \"msx-125\",\r\n        \"color\": \"white\",\r\n        \"licenseNo\": \"กช 9235\",\r\n        \"drivingLicense\": \"Photo\",\r\n        \"carImage\": \"Photo\",\r\n        \"carLicense\": \"Photo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/riderRegister/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"riderRegister",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rider Post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"locationSource\" : \"KBBU2\",\r\n    \"locationDestination\" : \"LOPBURI2\",\r\n    \"seat\" : \"4\",\r\n    \"online\" : \"True\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/riderPost/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"riderPost",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rider Close Post",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/riderClosePost/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"riderClosePost",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"locationDestination\": \"LOPBURI\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/userList?locationDestination=BKK",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"userList"
+					],
+					"query": [
+						{
+							"key": "locationDestination",
+							"value": "BKK"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Detail",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/postDetail/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"postDetail",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Notification Rider",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/getNotificationRider/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"getNotificationRider",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userID_rider\" : \"3\", \r\n    \"userID\" : \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/postRequest",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"postRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rider Accept",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userID_rider\" : \"3\", \r\n    \"userID\" : \"2\", \r\n    \"status\" : \"True\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/riderAccept",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"riderAccept"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
