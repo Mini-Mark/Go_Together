@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iosstyleswitch/iosstyleswitch.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,12 +25,7 @@ class _HomeState extends State<Home> {
             style: TextStyle(
               color: Colors.black87,
               fontSize: 18,
-            )),
-        IosSwitch(
-
-
-          onChanged: (newValue) => setState(() => role = !role),
-        )
+            ))
       ],
     ));
   }
