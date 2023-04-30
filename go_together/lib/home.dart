@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -6,10 +7,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool role = false;
+
+  toggleRole() {
+    setState(() {
+      role = !role;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool role = true;
-
     return Scaffold(
         appBar: AppBar(
       elevation: 0,
@@ -21,11 +28,25 @@ class _HomeState extends State<Home> {
               fontSize: 26,
               color: Colors.black87)),
       actions: [
-        Text("Test",
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 18,
-            ))
+        Container(
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Text("user",
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                    )),
+              ),
+              CupertinoSwitch(
+                  trackColor: Colors.grey,
+                  activeColor: Colors.black,
+                  value: role,
+                  onChanged: (e) => {toggleRole()})
+            ],
+          ),
+        )
       ],
     ));
   }

@@ -46,6 +46,32 @@ class Register extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(right: 8.0),
                                 child: Icon(
+                                  Icons.account_circle,
+                                  size: 20,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "Name",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
+                    SizedBox(height: 40),
+                    TextField(
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(),
+                          border: OutlineInputBorder(),
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
                                   Icons.email,
                                   size: 20,
                                   color: Colors.black87,
