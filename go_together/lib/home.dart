@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_together/history.dart';
 import 'package:go_together/list.dart';
+import 'package:go_together/map_detail.dart';
 import 'package:go_together/menu.dart';
 import 'package:go_together/notification.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
               ListPage(),
               HistoryPage(),
               NotificationPage(),
-              MenuPage()
+              MapDetailPage()
             ][currentPage]),
         appBar: AppBar(
           elevation: 0,
@@ -49,6 +50,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black87)),
           actions: [
             Container(
+              padding: EdgeInsets.only(right: 10),
               child: Row(
                 children: [
                   Padding(
