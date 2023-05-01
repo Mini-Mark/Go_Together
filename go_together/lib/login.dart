@@ -34,7 +34,6 @@ class _LoginState extends State<Login> {
         print(jsonMap['status']);
         if (jsonMap['status'] == true) {
           // Login successful, navigate to home screen
-
           Navigator.pushNamed(context, '/home');
         } else {
           // Login failed, display error message

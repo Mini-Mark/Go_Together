@@ -42,7 +42,24 @@ class _RegisterState extends State<Register> {
         print(jsonMap['status']);
         if (jsonMap['status'] == true) {
           // Registration successful, navigate to home screen
-          Navigator.pushNamed(context, '/home');
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Registration Successful'),
+                content: Text('You can now login with your email and password'),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, '/login');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         } else {
           // Registration failed, display error message
           showDialog(
@@ -50,7 +67,7 @@ class _RegisterState extends State<Register> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Registration Failed'),
-                content: Text('Please try again.'),
+                content: Text('Email already exists'),
                 actions: [
                   TextButton(
                     child: Text('OK'),
@@ -61,7 +78,7 @@ class _RegisterState extends State<Register> {
             },
           );
           setState(() {
-            _errorMessage = 'Please try again.';
+            _errorMessage = 'Email already exists';
             _isLoading = false;
           });
         }
@@ -304,7 +321,7 @@ class _RegisterState extends State<Register> {
                   ElevatedButton(
                     onPressed: () {
                       _submitForm();
-                      Navigator.pushNamed(context, '/login');
+                      //Navigator.pushNamed(context, '/login');
                     },
                     child: Container(
                       alignment: Alignment.center,
