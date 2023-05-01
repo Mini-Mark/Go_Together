@@ -44,17 +44,17 @@ class _SettingState extends State<SettingPage> {
                       // },
                       decoration: InputDecoration(
                           label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Name",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          )
+                        ],
+                      )),
                     ),
                     SizedBox(height: 5),
                     TextFormField(
@@ -66,25 +66,25 @@ class _SettingState extends State<SettingPage> {
                       // },
                       decoration: InputDecoration(
                           label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.phone,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Tel",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.phone,
+                              size: 20,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Text(
+                            "Tel",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          )
+                        ],
+                      )),
                     ),
                     SizedBox(height: 5),
                     Text(
@@ -109,11 +109,18 @@ class _SettingState extends State<SettingPage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(width: 10),
-            Icon(
-              Icons.edit,
-              size: 20,
-              color: Colors.black87,
-            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  allowChangePassword = !allowChangePassword;
+                });
+              },
+              child: Icon(
+                Icons.edit,
+                size: 20,
+                color: Colors.black87,
+              ),
+            )
           ],
         ),
         SizedBox(height: 10),
