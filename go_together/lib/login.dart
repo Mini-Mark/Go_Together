@@ -1,7 +1,75 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String _errorMessage = '';
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:3000/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'email': _emailController.text,
+            'password': _passwordController.text,
+          }),
+        );
+        Map<String, dynamic> jsonMap = json.decode(response.body);
+        print(jsonMap['status']);
+        if (jsonMap['status'] == true) {
+          // Login successful, navigate to home screen
+
+          Navigator.pushNamed(context, '/home');
+        } else {
+          // Login failed, display error message
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Login Failed'),
+                content: Text('Email or password is incorrect.'),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              );
+            },
+          );
+          setState(() {
+            _errorMessage = 'Email or password is incorrect';
+            _isLoading = false;
+          });
+        }
+      } catch (error) {
+        // Network error, display error message
+        setState(() {
+          _errorMessage = 'Could not connect to server';
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,9 +78,13 @@ class Login extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 50, 10.0, 0),
-                child: Image.asset('assets/start_banner.png',
-                    fit: BoxFit.contain, width: 500)),
+              padding: EdgeInsets.fromLTRB(10.0, 50, 10.0, 0),
+              child: Image.asset(
+                'assets/start_banner.png',
+                fit: BoxFit.contain,
+                width: 500,
+              ),
+            ),
             SizedBox(height: 15),
             Text(
               "Welcome Back",
@@ -25,13 +97,22 @@ class Login extends StatelessWidget {
             ),
             SizedBox(height: 50),
             Container(
-                constraints: BoxConstraints(
-                  maxWidth: 500,
-                ),
-                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                child: Column(children: [
-                  TextField(
-                    decoration: InputDecoration(
+              constraints: BoxConstraints(
+                maxWidth: 500,
+              ),
+              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+              child: Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    TextFormField(
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(),
                         border: OutlineInputBorder(),
                         label: Row(
@@ -51,37 +132,47 @@ class Login extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
-                            )
-                          ],
-                        )),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(),
-                        border: OutlineInputBorder(),
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.key,
-                                size: 20,
-                                color: Colors.black87,
-                              ),
                             ),
-                            Text(
-                              "Password",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            )
                           ],
-                        )),
-                  ),
-                ])),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(),
+                          border: OutlineInputBorder(),
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.key,
+                                  size: 20,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "Password",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
+                  ])),
+            )
           ],
         ),
       ),
@@ -94,7 +185,8 @@ class Login extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      // Navigator.pushNamed(context, '/home');
+                      _submitForm();
                     },
                     child: Container(
                       alignment: Alignment.center,
