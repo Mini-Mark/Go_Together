@@ -43,20 +43,9 @@ class _SettingState extends State<SettingPage> {
                       //   });
                       // },
                       decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25)),
                           label: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.account_circle_rounded,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
                               Text(
                                 "Name",
                                 style: TextStyle(
@@ -76,9 +65,6 @@ class _SettingState extends State<SettingPage> {
                       //   });
                       // },
                       decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25)),
                           label: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
