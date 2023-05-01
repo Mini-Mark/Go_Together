@@ -164,7 +164,7 @@ class ListItemComponent extends StatelessWidget {
               SizedBox(height: 10),
               Divider(
                 height: 1,
-                color: Colors.black87,
+                color: Colors.black38,
               ),
               SizedBox(height: 10),
               Row(

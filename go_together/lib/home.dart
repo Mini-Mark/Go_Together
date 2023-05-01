@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_together/history.dart';
 import 'package:go_together/list.dart';
 import 'package:go_together/notification.dart';
+import 'package:go_together/setting.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Home extends StatefulWidget {
@@ -13,11 +14,27 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool role = false;
   int currentPage = 0;
+  String title = "List";
+  bool backButton = false;
+
+  late Function backLeadingFunc;
 
   changePage(page) {
     setState(() {
       currentPage = page;
     });
+  }
+
+  setTitle(String title_param, bool backButton_param, Function backLeadingFunc_param) {
+    setState(() {
+      title = title_param;
+      backButton = backButton_param;
+      backLeadingFunc = backLeadingFunc_param;
+    });
+  }
+
+  backLeading(){
+    backLeadingFunc();
   }
 
   toggleRole() {
@@ -30,18 +47,24 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            padding: EdgeInsets.fromLTRB(18,20,18,0),
+            padding: EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: [
               ListPage(),
               HistoryPage(),
               NotificationPage(),
-              Home()
+              SettingPage(),
             ][currentPage]),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          title: Text("List",
+          automaticallyImplyLeading: backButton,
+          leading: backButton
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              : null,
+          title: Text(title,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 26,
@@ -92,8 +115,8 @@ class _HomeState extends State<Home> {
                   text: 'Notification',
                 ),
                 GButton(
-                  icon: Icons.list,
-                  text: 'Menu',
+                  icon: Icons.settings,
+                  text: 'Settings',
                 )
               ]),
         ));

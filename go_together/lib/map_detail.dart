@@ -6,6 +6,8 @@ class MapDetail extends StatefulWidget {
 }
 
 class _MapDetailState extends State<MapDetail> {
+  int button_step = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,7 +86,7 @@ class _MapDetailState extends State<MapDetail> {
                 SizedBox(height: 20),
                 Divider(
                   height: 1,
-                  color: Colors.black87,
+                  color: Colors.black38,
                 ),
                 SizedBox(height: 20),
                 Row(
@@ -142,20 +144,29 @@ class _MapDetailState extends State<MapDetail> {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/home');
+              setState(() {
+                button_step = 1;
+              });
               // _submitForm();
             },
             child: Container(
               alignment: Alignment.center,
               width: double.infinity,
               height: 40,
-              child: Text(
-                "Pick me !",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
+              child: [
+                Text(
+                  "Pick me !",
+                  style: TextStyle(fontSize: 18,color: Colors.white),
+                ),
+                Text(
+                  "Waiting",
+                  style: TextStyle(fontSize: 18),
+                )
+              ][button_step],
             ),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xFF00A8E8)),
+              backgroundColor: MaterialStateProperty.all(
+                  [Color(0xFF00A8E8), Color(0xFFF8C100)][button_step]),
             ),
           )
         ],
