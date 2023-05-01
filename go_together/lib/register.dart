@@ -14,161 +14,164 @@ class Register extends StatelessWidget {
       body: Center(
         child: Container(
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-          child: Column(
-            children: [
-              Text(
-                "Sign Up",
-                style: TextStyle(
-                    fontSize: 42,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87),
-              ),
-              SizedBox(height: 15),
-              Text(
-                "สมัครสมาชิก และสามารถเริ่มใช้งานได้เลย",
-                style: TextStyle(fontSize: 18),
-              ),
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: 500,
+          child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 50),
+            child: Column(
+              children: [
+                Text(
+                  "Sign Up",
+                  style: TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 40),
-                    TextField(
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(),
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.account_circle,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Name",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
-                    SizedBox(height: 40),
-                    TextField(
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(),
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.email,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Email KMITL",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
-                    SizedBox(height: 40),
-                    TextField(
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(),
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.phone,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Telephone Number",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
-                    SizedBox(height: 40),
-                    TextField(
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(),
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.vpn_key_outlined,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Password",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
-                    SizedBox(height: 40),
-                    TextField(
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(),
-                          border: OutlineInputBorder(),
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.key,
-                                  size: 20,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                "Re-Password",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
-                          )),
-                    )
-                  ],
+                SizedBox(height: 15),
+                Text(
+                  "สมัครสมาชิก และสามารถเริ่มใช้งานได้เลย",
+                  style: TextStyle(fontSize: 18),
                 ),
-              )
-            ],
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 500,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 40),
+                      TextField(
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.account_circle,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Name",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      SizedBox(height: 40),
+                      TextField(
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.email,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Email KMITL",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      SizedBox(height: 40),
+                      TextField(
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.phone,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Telephone Number",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      SizedBox(height: 40),
+                      TextField(
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.vpn_key_outlined,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Password",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      SizedBox(height: 40),
+                      TextField(
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.key,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Re-Password",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

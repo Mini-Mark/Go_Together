@@ -73,80 +73,47 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 50, 10.0, 0),
-              child: Image.asset(
-                'assets/start_banner.png',
-                fit: BoxFit.contain,
-                width: 500,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(10.0, 50, 10.0, 0),
+                child: Image.asset(
+                  'assets/start_banner.png',
+                  fit: BoxFit.contain,
+                  width: 500,
+                ),
               ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              "Welcome Back",
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 15),
-            Text(
-              "ยินดีต้อนรับเข้าสู่ Go Together ไปด้วยกันนะ",
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 50),
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: 500,
+              SizedBox(height: 15),
+              Text(
+                "Welcome Back",
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
-              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: Form(
-                  key: _formKey,
-                  child: Column(children: [
-                    TextFormField(
-                      controller: _emailController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(),
-                        border: OutlineInputBorder(),
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.email,
-                                size: 20,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            Text(
-                              "Email KMITL",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _passwordController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
+              SizedBox(height: 15),
+              Text(
+                "ยินดีต้อนรับเข้าสู่ Go Together ไปด้วยกันนะ",
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 50),
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: 500,
+                ),
+                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                child: Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      TextFormField(
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(),
                           border: OutlineInputBorder(),
                           label: Row(
@@ -155,24 +122,60 @@ class _LoginState extends State<Login> {
                               Padding(
                                 padding: EdgeInsets.only(right: 8.0),
                                 child: Icon(
-                                  Icons.key,
+                                  Icons.email,
                                   size: 20,
                                   color: Colors.black87,
                                 ),
                               ),
                               Text(
-                                "Password",
+                                "Email KMITL",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
                                 ),
-                              )
+                              ),
                             ],
-                          )),
-                    ),
-                  ])),
-            )
-          ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(),
+                            border: OutlineInputBorder(),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.key,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text(
+                                  "Password",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                    ])),
+              )
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
