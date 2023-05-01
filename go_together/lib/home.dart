@@ -116,7 +116,7 @@ class _HomeState extends State<Home> {
                 ),
                 GButton(
                   icon: Icons.settings,
-                  text: 'Settings',
+                  text: 'Setting',
                 )
               ]),
         ));

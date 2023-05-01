@@ -8,6 +8,19 @@ class SettingPage extends StatefulWidget {
 class _SettingState extends State<SettingPage> {
   bool allowChangePassword = false;
 
+  final _NameController = TextEditingController();
+  final _TelController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _NameController.text = 'John Doe';
+      _TelController.text = '123-456-7890';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,44 +32,80 @@ class _SettingState extends State<SettingPage> {
                   height: 100,
                   child: Expanded(child: Image.asset("assets/user_logo.png"))),
               SizedBox(width: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      // TextField(),
-                      Text(
-                        "33333333333",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 10),
-                      Icon(
-                        Icons.edit,
-                        size: 20,
-                        color: Colors.black87,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "1111111111",
-                      ),
-                      SizedBox(width: 10),
-                      Icon(
-                        Icons.edit,
-                        size: 20,
-                        color: Colors.black87,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "222222222222222",
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _NameController,
+                      // onChanged: (_keywordController) {
+                      //   setState(() {
+                      //     keyword = _keywordController;
+                      //   });
+                      // },
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.account_circle_rounded,
+                                  size: 20,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "Name",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      controller: _TelController,
+                      // onChanged: (_keywordController) {
+                      //   setState(() {
+                      //     keyword = _keywordController;
+                      //   });
+                      // },
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.phone,
+                                  size: 20,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "Tel",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              )
+                            ],
+                          )),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "222222222222222",
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
