@@ -186,8 +186,8 @@ class _LoginState extends State<Login> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Navigator.pushNamed(context, '/home');
-                      _submitForm();
+                      Navigator.pushNamed(context, '/home');
+                      //_submitForm();
                     },
                     child: Container(
                       alignment: Alignment.center,
