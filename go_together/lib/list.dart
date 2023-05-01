@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_together/map_detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ListPage extends StatefulWidget {
   @override
@@ -7,12 +9,23 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListState extends State<ListPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _keywordController = TextEditingController();
+
+  bool _isLoading = false;
+  String _errorMessage = '';
+
+  String keyword = "";
   int _currentPage = 0;
 
   changePage(int pg) {
     setState(() {
       _currentPage = pg;
     });
+  }
+
+  Future<void> _submitForm() async {
+    keyword = _keywordController.text;
   }
 
   @override
@@ -23,7 +36,13 @@ class _ListState extends State<ListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextField(
+            child: TextFormField(
+              controller: _keywordController,
+              onChanged: (_keywordController) {
+                setState(() {
+                  keyword = _keywordController;
+                });
+              },
               decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(),
                   border: OutlineInputBorder(
@@ -51,16 +70,44 @@ class _ListState extends State<ListPage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.only(bottom: 30),
-              scrollDirection: Axis.vertical,
-              children: [
-                ListItemComponent("S", "D", () => changePage(1)),
-                SizedBox(height: 10),
-                ListItemComponent("A", "B", () => changePage(1))
-              ],
+            child: FutureBuilder(
+              future: keyword != null
+                  ? http.get(Uri.parse(
+                      "http://localhost:3000/userList?locationDestination=$keyword"))
+                  : http.get(Uri.parse("http://localhost:3000/userList")),
+              builder: (BuildContext context,
+                  AsyncSnapshot<http.Response> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  if (json.decode(snapshot.data!.body)["data"].isEmpty) {
+                    return Container();
+                  } else {
+                    var data = json.decode(snapshot.data!.body)["data"];
+                    return ListView.builder(
+                      padding: EdgeInsets.only(bottom: 30),
+                      scrollDirection: Axis.vertical,
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var item = data[index];
+                        return Column(
+                          children: [
+                            ListItemComponent(
+                              item["locationSource"],
+                              item["locationDestination"],
+                              item["postID"],
+                              () => changePage(1),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }
+              },
             ),
-          )
+          ),
         ],
       )),
       MapDetail()
@@ -71,10 +118,11 @@ class _ListState extends State<ListPage> {
 class ListItemComponent extends StatelessWidget {
   final String source;
   final String des;
+  final int postID;
 
   final Function page;
 
-  ListItemComponent(this.source, this.des, this.page);
+  ListItemComponent(this.source, this.des, this.postID, this.page);
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +198,7 @@ class ListItemComponent extends StatelessWidget {
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Flexible(child: Text("Des")),
+                      Flexible(child: Text(this.des)),
                       SizedBox(width: 10),
                       Icon(
                         Icons.flag,

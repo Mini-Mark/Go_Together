@@ -332,7 +332,7 @@ app.get("/userList", async (req, res) => {
       "SELECT post.*, users.* FROM post JOIN users ON post.userID = users.userID";
 
     if (locationDestination) {
-      sql += " WHERE post.locationDestination = ?";
+      sql += ` WHERE post.locationDestination LIKE '%${locationDestination}%'`;
     }
 
     connection.query(sql, [locationDestination], (err, results) => {
