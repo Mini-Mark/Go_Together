@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_together/history.dart';
 import 'package:go_together/list.dart';
 import 'package:go_together/notification.dart';
+import 'package:go_together/post.dart';
 import 'package:go_together/rider_register.dart';
 import 'package:go_together/setting.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -54,13 +55,13 @@ class _HomeState extends State<Home> {
             child: [
               [
                 ListPage(),
-                HistoryPage(),
-                NotificationPage(),
+                null,
+                null,
                 SettingPage(),
               ],
               [
                 RiderRegisterPage(),
-                HistoryPage(),
+                Post(),
                 NotificationPage(),
                 SettingPage(),
               ]
