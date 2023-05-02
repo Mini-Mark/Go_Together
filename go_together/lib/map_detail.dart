@@ -30,7 +30,7 @@ class _MapDetailState extends State<MapDetail> {
           body: json.encode({
             'postID': postID,
             'userID': '20',
-            'seat': '0',
+            'status': '0',
           }),
         );
       } catch (error) {

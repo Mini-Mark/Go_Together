@@ -414,7 +414,16 @@ app.get("/getNotificationRider/:userID", (req, res) => {
 
 // /postRequest
 app.post("/postRequest", (req, res) => {
-  const { postID, userID, seat } = req.body;
+  const { postID, userID, status } = req.body ?? {};
+
+  // Check if required variables are defined
+  if (!postID || !userID || !status) {
+    res.status(400).json({
+      status: false,
+      message: "Invalid request body",
+    });
+    return;
+  }
 
   const checkSql =
     "SELECT COUNT(*) as num_riders FROM seat WHERE postID = ? AND status = 1";
@@ -428,6 +437,7 @@ app.post("/postRequest", (req, res) => {
     }
 
     const numRiders = results[0].num_riders;
+    console.log([numRiders]);
 
     const getNumSeatSql = "SELECT seat FROM post WHERE postID = ?";
 
@@ -439,10 +449,10 @@ app.post("/postRequest", (req, res) => {
         return;
       }
 
-      console.log(results);
       const numSeat = results[0].seat;
+      console.log(numRiders, numSeat);
 
-      if (numRiders >= numSeat) {
+      if (numRiders > numSeat) {
         res.status(400).json({
           status: false,
           message: "Seat is full",
@@ -450,9 +460,9 @@ app.post("/postRequest", (req, res) => {
         return;
       }
 
-      const checkDuplicateSql = "SELECT * FROM seat WHERE postID = ?";
+      const checkDuplicateSql = "SELECT * FROM seat WHERE userID = ?";
 
-      connection.execute(checkDuplicateSql, [postID], (err, results) => {
+      connection.execute(checkDuplicateSql, [userID], (err, results) => {
         if (err) {
           res.status(500).json({
             message: err.message,
@@ -460,20 +470,20 @@ app.post("/postRequest", (req, res) => {
           return;
         }
 
-        if (results.length > 0) {
+        if (results.length > 1) {
           res.status(400).json({
             status: false,
-            message: "Duplicate postID",
+            message: "Duplicate userID",
           });
           return;
         }
 
         const insertSql =
-          "INSERT INTO seat (postID, userID, seat) VALUES (?, ?, ?)";
+          "INSERT INTO seat (postID, userID, status) VALUES (?, ?, ?)";
 
         connection.execute(
           insertSql,
-          [postID, userID, seat],
+          [postID, userID, status],
           (err, results) => {
             if (err) {
               res.status(500).json({
