@@ -395,7 +395,8 @@ app.get("/postDetail/:postID", async (req, res) => {
 app.get("/getNotificationRider/:postID", (req, res) => {
   const { postID } = req.params;
 
-  const sql = "SELECT * FROM seat WHERE postID AND status = '0'";
+  const sql =
+    "SELECT post.*, seat.*, users.name FROM post JOIN seat ON post.postID = seat.postID JOIN users ON seat.userID = users.userID WHERE post.postID = ? AND seat.status = 0";
 
   connection.query(sql, [postID], (err, results) => {
     if (err) {
@@ -410,6 +411,7 @@ app.get("/getNotificationRider/:postID", (req, res) => {
     });
   });
 });
+
 // endpoint: /getNotificationRider
 
 // /postRequest

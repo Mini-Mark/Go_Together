@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -6,31 +8,57 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationState extends State<NotificationPage> {
+  late Future<List<dynamic>> _futureNotifications;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _futureNotifications = fetchNotifications();
+    });
+  }
+
+  Future<List<dynamic>> fetchNotifications() async {
+    final response = await http
+        .get(Uri.parse('http://localhost:3000/getNotificationRider/11'));
+    if (response.statusCode == 200) {
+      print(json.decode(response.body)['data']);
+      return json.decode(response.body)['data'];
+    } else {
+      throw Exception('Failed to load notifications');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.only(bottom: 30),
-      children: [
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D"),
-        SizedBox(height: 20),
-        ListItemComponent("S", "D")
-      ],
+    return FutureBuilder(
+      future: _futureNotifications,
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          final List<dynamic> notifications = snapshot.data!;
+          return ListView.builder(
+            padding: EdgeInsets.only(bottom: 30),
+            itemCount: notifications.length,
+            itemBuilder: (BuildContext context, int index) {
+              final notification = notifications[index];
+              print(notification);
+              return ListItemComponent(
+                notification['locationSource'],
+                notification['locationDestination'],
+                notification['name'],
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('${snapshot.error}'),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
@@ -38,8 +66,9 @@ class _NotificationState extends State<NotificationPage> {
 class ListItemComponent extends StatelessWidget {
   final String source;
   final String des;
+  final String name;
 
-  ListItemComponent(this.source, this.des);
+  ListItemComponent(this.source, this.des, this.name);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,7 +102,7 @@ class ListItemComponent extends StatelessWidget {
                           color: Colors.black87,
                         ),
                         SizedBox(width: 10),
-                        Expanded(child: Text(this.source)),
+                        Expanded(child: Text(this.source ?? '')),
                       ],
                     ),
                   ),
@@ -108,7 +137,7 @@ class ListItemComponent extends StatelessWidget {
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Flexible(child: Text(this.des)),
+                      Flexible(child: Text(this.des ?? '')),
                       SizedBox(width: 10),
                       Icon(
                         Icons.flag,
@@ -123,7 +152,7 @@ class ListItemComponent extends StatelessWidget {
               Container(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "from: Kotcharat Kung",
+                    "from: ${this.name}}",
                     style: TextStyle(color: Color(0xFF565656)),
                   )),
               SizedBox(height: 10),
