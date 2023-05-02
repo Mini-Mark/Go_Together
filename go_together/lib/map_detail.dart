@@ -139,10 +139,9 @@ class _MapDetailState extends State<MapDetail> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Flexible(
-                                child: Text(jsonMap?['data']?[0]?.isNotEmpty ==
-                                        true
-                                    ? jsonMap['data'][0]['locationDestination']
-                                    : '')),
+                                child: Text(jsonMap['data']?[0]
+                                        ?['locationDestination'] ??
+                                    '')),
                             SizedBox(width: 10),
                             Icon(
                               Icons.flag,
@@ -172,12 +171,8 @@ class _MapDetailState extends State<MapDetail> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(jsonMap?['data']?[0]?.isNotEmpty == true
-                              ? jsonMap['data'][0]['name']
-                              : ''),
-                          Text(jsonMap?['data']?[0]?.isNotEmpty == true
-                              ? jsonMap['data'][0]['tel']
-                              : ''),
+                          Text(jsonMap['data']?[0]?['name'] ?? ''),
+                          Text(jsonMap['data']?[0]?['tel'] ?? ''),
                         ],
                       ),
                       Expanded(
@@ -196,9 +191,7 @@ class _MapDetailState extends State<MapDetail> {
                                     color: Colors.black87,
                                   ),
                                   SizedBox(width: 10),
-                                  Text(jsonMap?['data']?[0]?.isNotEmpty == true
-                                      ? jsonMap['data'][0]['licenseNo']
-                                      : ''),
+                                  Text(jsonMap['data']?[0]?['licenseNo'] ?? ''),
                                 ],
                               ),
                               Row(
@@ -209,9 +202,7 @@ class _MapDetailState extends State<MapDetail> {
                                     color: Colors.black87,
                                   ),
                                   SizedBox(width: 10),
-                                  Text(jsonMap?['data']?[0]?.isNotEmpty == true
-                                      ? "${jsonMap['data'][0]['seat']}"
-                                      : ''),
+                                  Text("${jsonMap['data']?[0]?['seat'] ?? ''}"),
                                 ],
                               ),
                             ],

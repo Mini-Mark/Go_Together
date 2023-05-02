@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 class RiderRegisterPage extends StatefulWidget {
+  Function registerFinishPage;
+
+  RiderRegisterPage({required this.registerFinishPage});
+
   @override
   _RiderRegisterState createState() => _RiderRegisterState();
 }
@@ -46,6 +52,14 @@ class _RiderRegisterState extends State<RiderRegisterPage> {
         print(jsonMap['status']);
         if (jsonMap['status'] == true) {
           // Registration successful, navigate to home screen
+          globals.userData["data"]["brand"] = _brandController.text;
+          globals.userData["data"]["model"] = _modelController.text;
+          globals.userData["data"]["color"] = _colorController.text;
+          globals.userData["data"]["licenseNo"] = _licenseNoController.text;
+          globals.userData["data"]["drivingLicense"] = "drivingLicense.png";
+          globals.userData["data"]["carImage"] = "carImage.png";
+          globals.userData["data"]["carLicense"] = "carLicense.png";
+          
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -57,7 +71,7 @@ class _RiderRegisterState extends State<RiderRegisterPage> {
                     child: Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.pushNamed(context, '/login');
+                      widget.registerFinishPage();
                     },
                   ),
                 ],
@@ -99,6 +113,7 @@ class _RiderRegisterState extends State<RiderRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: EdgeInsets.only(top: 20),
       child: Form(
         key: _formKey,
         child: Column(

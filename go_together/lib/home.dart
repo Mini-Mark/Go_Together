@@ -105,7 +105,8 @@ class _HomeState extends State<Home> {
                     ? Post(
                         toggleRiderStatus: this.toggleRiderStatus,
                         status: rider_isOnline)
-                    : RiderRegisterPage(),
+                    : RiderRegisterPage(
+                        registerFinishPage: () => changePage(0)),
                 null,
                 NotificationPage(),
                 SettingPage(),
