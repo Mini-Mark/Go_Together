@@ -240,9 +240,9 @@ app.put("/riderRegister", async (req, res) => {
 // endpoint: /riderRegister
 
 // /riderPost
-app.post("/riderPost/:userID", async (req, res) => {
-  const userID = req.params.userID;
-  const { locationSource, locationDestination, seat, online } = req.body;
+app.post("/riderPost", async (req, res) => {
+  const { userID, locationSource, locationDestination, seat, online } =
+    req.body;
   let sqlCheckUser = "SELECT * FROM users WHERE userID = ?";
   let sqlDeletePost = "DELETE FROM post WHERE userID = ?";
   let sqlInsertPost =
@@ -392,12 +392,12 @@ app.get("/postDetail/:postID", async (req, res) => {
 // endpoint: /PostDetail
 
 // /getNotificationRider
-app.get("/getNotificationRider/:userID", (req, res) => {
-  const { userID } = req.params;
+app.get("/getNotificationRider/:postID", (req, res) => {
+  const { postID } = req.params;
 
-  const sql = "SELECT * FROM seat WHERE userID_rider = userID AND status = '0'";
+  const sql = "SELECT * FROM seat WHERE postID AND status = '0'";
 
-  connection.query(sql, [userID], (err, results) => {
+  connection.query(sql, [postID], (err, results) => {
     if (err) {
       res.status(500).json({
         message: err.message,

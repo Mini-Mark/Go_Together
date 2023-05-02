@@ -56,13 +56,6 @@ class _RegisterState extends State<Register> {
                       Navigator.pushNamed(context, '/login');
                     },
                   ),
-                  TextButton(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.pushNamed(context, '/login');
-                    },
-                  ),
                 ],
               );
             },
