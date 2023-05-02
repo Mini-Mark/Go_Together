@@ -18,9 +18,12 @@ class _ListState extends State<ListPage> {
   String keyword = "";
   int _currentPage = 0;
 
-  changePage(int pg) {
+  int _postID = 0;
+
+  changePage(int pg, int postID) {
     setState(() {
       _currentPage = pg;
+      _postID = postID;
     });
   }
 
@@ -69,48 +72,48 @@ class _ListState extends State<ListPage> {
                   )),
             ),
           ),
-          // Expanded(
-          //   child: FutureBuilder(
-          //     future: keyword != null
-          //         ? http.get(Uri.parse(
-          //             "http://localhost:3000/userList?locationDestination=$keyword"))
-          //         : http.get(Uri.parse("http://localhost:3000/userList")),
-          //     builder: (BuildContext context,
-          //         AsyncSnapshot<http.Response> snapshot) {
-          //       if (!snapshot.hasData) {
-          //         return Center(child: CircularProgressIndicator());
-          //       } else {
-          //         if (json.decode(snapshot.data!.body)["data"].isEmpty) {
-          //           return Container();
-          //         } else {
-          //           var data = json.decode(snapshot.data!.body)["data"];
-          //           return ListView.builder(
-          //             padding: EdgeInsets.only(bottom: 30),
-          //             scrollDirection: Axis.vertical,
-          //             itemCount: data.length,
-          //             itemBuilder: (BuildContext context, int index) {
-          //               var item = data[index];
-          //               return Column(
-          //                 children: [
-          //                   ListItemComponent(
-          //                     item["locationSource"],
-          //                     item["locationDestination"],
-          //                     item["postID"],
-          //                     () => changePage(1),
-          //                   ),
-          //                   SizedBox(height: 10),
-          //                 ],
-          //               );
-          //             },
-          //           );
-          //         }
-          //       }
-          //     },
-          //   ),
-          // ),
+          Expanded(
+            child: FutureBuilder(
+              future: keyword != null
+                  ? http.get(Uri.parse(
+                      "http://localhost:3000/userList?locationDestination=$keyword"))
+                  : http.get(Uri.parse("http://localhost:3000/userList")),
+              builder: (BuildContext context,
+                  AsyncSnapshot<http.Response> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  if (json.decode(snapshot.data!.body)["data"].isEmpty) {
+                    return Container();
+                  } else {
+                    var data = json.decode(snapshot.data!.body)["data"];
+                    return ListView.builder(
+                      padding: EdgeInsets.only(bottom: 30),
+                      scrollDirection: Axis.vertical,
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var item = data[index];
+                        return Column(
+                          children: [
+                            ListItemComponent(
+                              item["locationSource"],
+                              item["locationDestination"],
+                              item["postID"],
+                              () => changePage(1, item["postID"]),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+            ),
+          ),
         ],
       )),
-      MapDetail()
+      MapDetail(_postID)
     ][_currentPage];
   }
 }

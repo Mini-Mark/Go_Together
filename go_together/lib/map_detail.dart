@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MapDetail extends StatefulWidget {
+  final int postID;
+
+  MapDetail(this.postID);
+
   @override
-  _MapDetailState createState() => _MapDetailState();
+  _MapDetailState createState() => _MapDetailState(this.postID);
 }
 
 class _MapDetailState extends State<MapDetail> {
+  final _formKey = GlobalKey<FormState>();
+
   int button_step = 0;
+
+  final int postID;
+
+  _MapDetailState(this.postID);
+
+  @override
+  void initState() {
+    super.initState();
+    getAPI();
+  }
+
+  Map<String, dynamic> jsonMap = {};
+
+  @override
+  Future<void> getAPI() async {
+    final response = await http.get(
+      Uri.parse('http://localhost:3000/postDetail/$postID'),
+      headers: {'Content-Type': 'application/json'},
+    );
+    setState(() {
+      jsonMap = json.decode(response.body);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +67,12 @@ class _MapDetailState extends State<MapDetail> {
                               color: Colors.black87,
                             ),
                             SizedBox(width: 10),
-                            Expanded(child: Text("S")),
+                            Expanded(
+                              child: Text(
+                                  jsonMap?['data']?[0]?.isNotEmpty == true
+                                      ? jsonMap['data'][0]['locationSource']
+                                      : ''),
+                            )
                           ],
                         ),
                       ),
@@ -71,7 +107,11 @@ class _MapDetailState extends State<MapDetail> {
                           child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Flexible(child: Text("D")),
+                          Flexible(
+                              child: Text(jsonMap?['data']?[0]?.isNotEmpty ==
+                                      true
+                                  ? jsonMap['data'][0]['locationDestination']
+                                  : '')),
                           SizedBox(width: 10),
                           Icon(
                             Icons.flag,
@@ -101,8 +141,12 @@ class _MapDetailState extends State<MapDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Mon"),
-                        Text("081-2345678"),
+                        Text(jsonMap?['data']?[0]?.isNotEmpty == true
+                            ? jsonMap['data'][0]['name']
+                            : ''),
+                        Text(jsonMap?['data']?[0]?.isNotEmpty == true
+                            ? jsonMap['data'][0]['tel']
+                            : ''),
                       ],
                     ),
                     Expanded(
@@ -121,7 +165,9 @@ class _MapDetailState extends State<MapDetail> {
                                   color: Colors.black87,
                                 ),
                                 SizedBox(width: 10),
-                                Text("กย 122"),
+                                Text(jsonMap?['data']?[0]?.isNotEmpty == true
+                                    ? jsonMap['data'][0]['licenseNo']
+                                    : ''),
                               ],
                             ),
                             Row(
@@ -132,7 +178,9 @@ class _MapDetailState extends State<MapDetail> {
                                   color: Colors.black87,
                                 ),
                                 SizedBox(width: 10),
-                                Text("0 / 4"),
+                                Text(jsonMap?['data']?[0]?.isNotEmpty == true
+                                    ? "${jsonMap['data'][0]['seat']}"
+                                    : ''),
                               ],
                             ),
                           ],

@@ -370,35 +370,20 @@ app.get("/userList", async (req, res) => {
 // endpoint: /userList
 
 // PostDetail
-app.get("/PostDetail/:userID", async (req, res) => {
-  const { userID } = req.params;
-  let sql = "SELECT * FROM users WHERE userID =?";
-  connection.query(sql, [userID], (err, users) => {
+app.get("/postDetail/:postID", async (req, res) => {
+  const { postID } = req.params;
+  let sql =
+    "SELECT post.*, users.* FROM post JOIN users ON post.userID = users.userID WHERE post.postID = ?";
+  connection.query(sql, [postID], (err, posts) => {
     if (err) {
       res.status(500).json({
         message: err.message,
       });
       return;
     }
-    if (users.length === 0) {
-      res.status(404).json({
-        message: "User not found",
-      });
-      return;
-    }
-    sql = "SELECT * FROM post WHERE userID =?";
-    connection.query(sql, [userID], (err, posts) => {
-      if (err) {
-        res.status(500).json({
-          message: err.message,
-        });
-        return;
-      }
-      res.status(200).json({
-        message: "Success",
-        user: users[0],
-        posts,
-      });
+    res.status(200).json({
+      message: "Success",
+      data: posts,
     });
   });
 });
