@@ -8,6 +8,8 @@ import 'package:go_together/rider_register.dart';
 import 'package:go_together/setting.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+import 'globals.dart' as globals;
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -31,7 +33,7 @@ class _HomeState extends State<Home> {
   changePage(page) {
     setState(() {
       currentPage = page;
-      if (role == 0) {
+      if (!this.role) {
         switch (currentPage) {
           case 0:
             setTitle("List");
@@ -50,7 +52,9 @@ class _HomeState extends State<Home> {
       } else {
         switch (currentPage) {
           case 0:
-            setTitle("Detail");
+            globals.userData["data"]["drivingLicense"] != null
+                ? setTitle("Post")
+                : setTitle("Rider Register");
             break;
           case 1:
             setTitle("History");
@@ -97,10 +101,12 @@ class _HomeState extends State<Home> {
                 SettingPage(),
               ],
               [
-                RiderRegisterPage(),
-                Post(
-                    toggleRiderStatus: this.toggleRiderStatus,
-                    status: rider_isOnline),
+                globals.userData["data"]["drivingLicense"] != null
+                    ? Post(
+                        toggleRiderStatus: this.toggleRiderStatus,
+                        status: rider_isOnline)
+                    : RiderRegisterPage(),
+                null,
                 NotificationPage(),
                 SettingPage(),
               ]

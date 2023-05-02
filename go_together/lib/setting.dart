@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingState createState() => _SettingState();
@@ -24,8 +26,8 @@ class _SettingState extends State<SettingPage> {
     super.initState();
 
     setState(() {
-      _nameController.text = 'John Doe';
-      _telController.text = '123-456-7890';
+      _nameController.text = globals.userData["data"]["name"];
+      _telController.text = globals.userData["data"]["tel"];
     });
   }
 
@@ -191,10 +193,20 @@ class _SettingState extends State<SettingPage> {
                           ],
                         )),
                       ),
-                      SizedBox(height: 5),
-                      Text(
-                        "222222222222222",
-                      ),
+                      SizedBox(height: 15),
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: 'Email: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
+                            TextSpan(
+                                text: '${globals.userData["data"]["email"]}',
+                                style: TextStyle(color: Colors.black)),
+                          ])))
                     ],
                   ),
                 ),
