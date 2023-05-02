@@ -69,45 +69,45 @@ class _ListState extends State<ListPage> {
                   )),
             ),
           ),
-          Expanded(
-            child: FutureBuilder(
-              future: keyword != null
-                  ? http.get(Uri.parse(
-                      "http://localhost:3000/userList?locationDestination=$keyword"))
-                  : http.get(Uri.parse("http://localhost:3000/userList")),
-              builder: (BuildContext context,
-                  AsyncSnapshot<http.Response> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  if (json.decode(snapshot.data!.body)["data"].isEmpty) {
-                    return Container();
-                  } else {
-                    var data = json.decode(snapshot.data!.body)["data"];
-                    return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 30),
-                      scrollDirection: Axis.vertical,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var item = data[index];
-                        return Column(
-                          children: [
-                            ListItemComponent(
-                              item["locationSource"],
-                              item["locationDestination"],
-                              item["postID"],
-                              () => changePage(1),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                }
-              },
-            ),
-          ),
+          // Expanded(
+          //   child: FutureBuilder(
+          //     future: keyword != null
+          //         ? http.get(Uri.parse(
+          //             "http://localhost:3000/userList?locationDestination=$keyword"))
+          //         : http.get(Uri.parse("http://localhost:3000/userList")),
+          //     builder: (BuildContext context,
+          //         AsyncSnapshot<http.Response> snapshot) {
+          //       if (!snapshot.hasData) {
+          //         return Center(child: CircularProgressIndicator());
+          //       } else {
+          //         if (json.decode(snapshot.data!.body)["data"].isEmpty) {
+          //           return Container();
+          //         } else {
+          //           var data = json.decode(snapshot.data!.body)["data"];
+          //           return ListView.builder(
+          //             padding: EdgeInsets.only(bottom: 30),
+          //             scrollDirection: Axis.vertical,
+          //             itemCount: data.length,
+          //             itemBuilder: (BuildContext context, int index) {
+          //               var item = data[index];
+          //               return Column(
+          //                 children: [
+          //                   ListItemComponent(
+          //                     item["locationSource"],
+          //                     item["locationDestination"],
+          //                     item["postID"],
+          //                     () => changePage(1),
+          //                   ),
+          //                   SizedBox(height: 10),
+          //                 ],
+          //               );
+          //             },
+          //           );
+          //         }
+          //       }
+          //     },
+          //   ),
+          // ),
         ],
       )),
       MapDetail()
@@ -217,8 +217,11 @@ class ListItemComponent extends StatelessWidget {
               SizedBox(height: 10),
               Row(
                 children: [
-                  Image.asset("assets/user_logo.png",
-                      fit: BoxFit.contain, width: 40),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(150.0),
+                    child: Image.asset("assets/user_logo.png",
+                        fit: BoxFit.contain, width: 40),
+                  ),
                   SizedBox(width: 15),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

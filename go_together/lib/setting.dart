@@ -30,7 +30,10 @@ class _SettingState extends State<SettingPage> {
             children: [
               SizedBox(
                   height: 100,
-                  child: Expanded(child: Image.asset("assets/user_logo.png"))),
+                  child: Expanded(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(150.0),
+                          child: Image.asset("assets/user_logo.png")))),
               SizedBox(width: 20),
               Expanded(
                 child: Column(

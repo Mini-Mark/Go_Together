@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_together/history.dart';
 import 'package:go_together/list.dart';
 import 'package:go_together/notification.dart';
+import 'package:go_together/rider_register.dart';
 import 'package:go_together/setting.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -25,7 +26,8 @@ class _HomeState extends State<Home> {
     });
   }
 
-  setTitle(String title_param, bool backButton_param, Function backLeadingFunc_param) {
+  setTitle(String title_param, bool backButton_param,
+      Function backLeadingFunc_param) {
     setState(() {
       title = title_param;
       backButton = backButton_param;
@@ -33,13 +35,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  backLeading(){
+  backLeading() {
     backLeadingFunc();
   }
 
   toggleRole() {
     setState(() {
       role = !role;
+      currentPage = 0;
     });
   }
 
@@ -49,11 +52,19 @@ class _HomeState extends State<Home> {
         body: Container(
             padding: EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: [
-              ListPage(),
-              HistoryPage(),
-              NotificationPage(),
-              SettingPage(),
-            ][currentPage]),
+              [
+                ListPage(),
+                HistoryPage(),
+                NotificationPage(),
+                SettingPage(),
+              ],
+              [
+                RiderRegisterPage(),
+                HistoryPage(),
+                NotificationPage(),
+                SettingPage(),
+              ]
+            ][role ? 1 : 0][currentPage]),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -75,13 +86,28 @@ class _HomeState extends State<Home> {
               child: Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Text("user",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 18,
-                        )),
-                  ),
+                      padding: EdgeInsets.only(right: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          this.role
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 3),
+                                  child: Icon(
+                                    Icons.circle,
+                                    size: 10,
+                                    color: Colors.red,
+                                  ),
+                                )
+                              : Container(),
+                          SizedBox(width: 7),
+                          Text(this.role ? "rider" : "user",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 18,
+                              )),
+                        ],
+                      )),
                   CupertinoSwitch(
                       trackColor: Colors.grey,
                       activeColor: Colors.black,

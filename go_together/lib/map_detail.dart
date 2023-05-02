@@ -91,8 +91,11 @@ class _MapDetailState extends State<MapDetail> {
                 SizedBox(height: 20),
                 Row(
                   children: [
-                    Image.asset("assets/user_logo.png",
-                        fit: BoxFit.contain, width: 40),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(150.0),
+                      child: Image.asset("assets/user_logo.png",
+                          fit: BoxFit.contain, width: 40),
+                    ),
                     SizedBox(width: 15),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -156,7 +159,7 @@ class _MapDetailState extends State<MapDetail> {
               child: [
                 Text(
                   "Pick me !",
-                  style: TextStyle(fontSize: 18,color: Colors.white),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
                 Text(
                   "Waiting",
