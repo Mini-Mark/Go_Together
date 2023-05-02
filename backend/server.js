@@ -194,9 +194,9 @@ app.put("/settings", async (req, res) => {
 // endpoint: /Settings
 
 // /riderRegister
-app.put("/riderRegister/:userID", async (req, res) => {
-  const { userID } = req.params;
+app.put("/riderRegister", async (req, res) => {
   const {
+    userID,
     brand,
     model,
     color,
