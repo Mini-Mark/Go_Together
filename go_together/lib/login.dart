@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'globals.dart' as globals;
 
 class Login extends StatefulWidget {
   @override
@@ -31,9 +32,13 @@ class _LoginState extends State<Login> {
           }),
         );
         Map<String, dynamic> jsonMap = json.decode(response.body);
-        print(jsonMap['status']);
+
+        print(jsonMap);
+
         if (jsonMap['status'] == true) {
           // Login successful, navigate to home screen
+          globals.isLoggedIn = true;
+          globals.userData = jsonMap;
           Navigator.pushNamed(context, '/home');
         } else {
           // Login failed, display error message

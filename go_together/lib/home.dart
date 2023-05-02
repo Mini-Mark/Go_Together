@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool rider_isOnline = false;
   bool role = false;
   int currentPage = 0;
   String title = "List";
@@ -21,18 +22,54 @@ class _HomeState extends State<Home> {
 
   late Function backLeadingFunc;
 
-  changePage(page) {
+  toggleRiderStatus() {
     setState(() {
-      currentPage = page;
+      rider_isOnline = !rider_isOnline;
     });
   }
 
-  setTitle(String title_param, bool backButton_param,
-      Function backLeadingFunc_param) {
+  changePage(page) {
+    setState(() {
+      currentPage = page;
+      if (role == 0) {
+        switch (currentPage) {
+          case 0:
+            setTitle("List");
+            break;
+          case 1:
+            setTitle("History");
+            break;
+          case 2:
+            setTitle("Notification");
+            break;
+          case 3:
+            setTitle("Settings");
+            break;
+          default:
+        }
+      } else {
+        switch (currentPage) {
+          case 0:
+            setTitle("Detail");
+            break;
+          case 1:
+            setTitle("History");
+            break;
+          case 2:
+            setTitle("Notification");
+            break;
+          case 3:
+            setTitle("Settings");
+            break;
+          default:
+        }
+      }
+    });
+  }
+
+  setTitle(String title_param) {
     setState(() {
       title = title_param;
-      backButton = backButton_param;
-      backLeadingFunc = backLeadingFunc_param;
     });
   }
 
@@ -40,10 +77,10 @@ class _HomeState extends State<Home> {
     backLeadingFunc();
   }
 
-  toggleRole() {
+  void toggleRole() {
     setState(() {
       role = !role;
-      currentPage = 0;
+      changePage(0);
     });
   }
 
@@ -61,7 +98,9 @@ class _HomeState extends State<Home> {
               ],
               [
                 RiderRegisterPage(),
-                Post(),
+                Post(
+                    toggleRiderStatus: this.toggleRiderStatus,
+                    status: rider_isOnline),
                 NotificationPage(),
                 SettingPage(),
               ]
@@ -97,7 +136,9 @@ class _HomeState extends State<Home> {
                                   child: Icon(
                                     Icons.circle,
                                     size: 10,
-                                    color: Colors.red,
+                                    color: rider_isOnline
+                                        ? Color(0xFF4EFF55)
+                                        : Colors.red,
                                   ),
                                 )
                               : Container(),

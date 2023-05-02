@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
+  final Function toggleRiderStatus;
+  final bool status;
+
+  Post({required this.toggleRiderStatus, required this.status});
+
   @override
   _PostState createState() => _PostState();
 }
 
 class _PostState extends State<Post> {
   int button_step = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if (widget.status) {
+      button_step = 1;
+    } else {
+      button_step = 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +147,8 @@ class _PostState extends State<Post> {
               setState(() {
                 button_step = (button_step == 1 ? 0 : 1);
               });
+
+              widget.toggleRiderStatus();
               // _submitForm();
             },
             child: Container(
@@ -138,11 +157,11 @@ class _PostState extends State<Post> {
               height: 40,
               child: [
                 Text(
-                  "Online",
+                  "Go online !",
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 Text(
-                  "Offline",
+                  "Return to offline",
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 )
               ][button_step],
