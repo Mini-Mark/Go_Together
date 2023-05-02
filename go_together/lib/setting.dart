@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -7,18 +9,116 @@ class SettingPage extends StatefulWidget {
 
 class _SettingState extends State<SettingPage> {
   bool allowChangePassword = false;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _telController = TextEditingController();
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _rePasswordController = TextEditingController();
 
-  final _NameController = TextEditingController();
-  final _TelController = TextEditingController();
+  bool _isLoading = false;
+  String _errorMessage = '';
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      _NameController.text = 'John Doe';
-      _TelController.text = '123-456-7890';
+      _nameController.text = 'John Doe';
+      _telController.text = '123-456-7890';
     });
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        if (_newPasswordController.text != _rePasswordController.text) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Password not match'),
+                content: Text('Please check your password again'),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              );
+            },
+          );
+          return;
+        } else {
+          final response = await http.put(
+            Uri.parse('http://localhost:3000/settings'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({
+              'userID': '2',
+              'name': _nameController.text,
+              'tel': _telController.text,
+              'oldPassword': _oldPasswordController.text,
+              'password': _newPasswordController.text,
+            }),
+          );
+
+          Map<String, dynamic> jsonMap = json.decode(response.body);
+          print(jsonMap['status']);
+          if (jsonMap['status'] == true) {
+            // Registration successful, navigate to home screen
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Updated Successful'),
+                  content: Text('User profile updated successfully'),
+                  actions: [
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // Navigator.pushNamed(context, '/login');
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            // Registration failed, display error message
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Updated Failed'),
+                  content: Text('User profile updated Failed'),
+                  actions: [
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                );
+              },
+            );
+            setState(() {
+              _errorMessage = 'User profile updated Failed';
+              _isLoading = false;
+            });
+          }
+        }
+      } catch (error) {
+        // Network error, display error message
+        setState(() {
+          _errorMessage = 'An error occurred, please try again later.';
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -26,77 +126,80 @@ class _SettingState extends State<SettingPage> {
     return Column(
       children: [
         Container(
-          child: Row(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(150.0),
-                  child: Image.asset(
-                    "assets/user_logo.png",
-                    width: 125,
-                  )),
-              SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _NameController,
-                      // onChanged: (_keywordController) {
-                      //   setState(() {
-                      //     keyword = _keywordController;
-                      //   });
-                      // },
-                      decoration: InputDecoration(
-                          label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+          child: Form(
+            key: _formKey,
+            child: Row(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(150.0),
+                    child: Image.asset(
+                      "assets/user_logo.png",
+                      width: 125,
+                    )),
+                SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _nameController,
+                        // onChanged: (_keywordController) {
+                        //   setState(() {
+                        //     keyword = _keywordController;
+                        //   });
+                        // },
+                        decoration: InputDecoration(
+                            label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Name",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            )
+                          ],
+                        )),
+                      ),
+                      SizedBox(height: 5),
+                      TextFormField(
+                        controller: _telController,
+                        // onChanged: (_keywordController) {
+                        //   setState(() {
+                        //     keyword = _keywordController;
+                        //   });
+                        // },
+                        decoration: InputDecoration(
+                            label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.phone,
+                                size: 20,
+                                color: Colors.black87,
+                              ),
                             ),
-                          )
-                        ],
-                      )),
-                    ),
-                    SizedBox(height: 5),
-                    TextFormField(
-                      controller: _TelController,
-                      // onChanged: (_keywordController) {
-                      //   setState(() {
-                      //     keyword = _keywordController;
-                      //   });
-                      // },
-                      decoration: InputDecoration(
-                          label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.phone,
-                              size: 20,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Text(
-                            "Tel",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          )
-                        ],
-                      )),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      "222222222222222",
-                    ),
-                  ],
+                            Text(
+                              "Tel",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            )
+                          ],
+                        )),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "222222222222222",
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         SizedBox(height: 10),
@@ -128,13 +231,14 @@ class _SettingState extends State<SettingPage> {
         ),
         SizedBox(height: 10),
         TextFormField(
+          controller: _oldPasswordController,
           enabled: allowChangePassword,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Please enter your password';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value!.isEmpty) {
+          //     return 'Please enter your password';
+          //   }
+          //   return null;
+          // },
           obscureText: true,
           decoration: InputDecoration(
               filled: !allowChangePassword,
@@ -163,13 +267,14 @@ class _SettingState extends State<SettingPage> {
         ),
         SizedBox(height: 20),
         TextFormField(
+          controller: _newPasswordController,
           enabled: allowChangePassword,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Please enter your password';
-            }
-            return null;
-          },
+          // validator: (value) {
+          //   if (value!.isEmpty) {
+          //     return 'Please enter your password';
+          //   }
+          //   return null;
+          // },
           obscureText: true,
           decoration: InputDecoration(
               filled: !allowChangePassword,
@@ -198,13 +303,8 @@ class _SettingState extends State<SettingPage> {
         ),
         SizedBox(height: 20),
         TextFormField(
+          controller: _rePasswordController,
           enabled: allowChangePassword,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Please enter your password';
-            }
-            return null;
-          },
           obscureText: true,
           decoration: InputDecoration(
               filled: !allowChangePassword,
@@ -238,7 +338,10 @@ class _SettingState extends State<SettingPage> {
         ),
         SizedBox(height: 20),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            _submitForm();
+            setState(() => (allowChangePassword = false));
+          },
           child: Container(
             alignment: Alignment.center,
             width: double.infinity,
