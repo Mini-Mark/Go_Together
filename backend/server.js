@@ -412,12 +412,12 @@ app.get("/getNotificationRider/:userID", (req, res) => {
 
 // /postRequest
 app.post("/postRequest", (req, res) => {
-  const { userID_rider, userID } = req.body;
+  const { postID, userID } = req.body;
 
   const checkSql =
-    "SELECT COUNT(*) as num_riders FROM seat WHERE userID_rider = ? AND status = 1";
+    "SELECT COUNT(*) as num_riders FROM seat WHERE postID = ? AND status = 1";
 
-  connection.execute(checkSql, [userID_rider], (err, results) => {
+  connection.execute(checkSql, [postID], (err, results) => {
     if (err) {
       res.status(500).json({
         message: err.message,
@@ -429,7 +429,7 @@ app.post("/postRequest", (req, res) => {
 
     const getNumSeatSql = "SELECT seat FROM post WHERE userID = ?";
 
-    connection.execute(getNumSeatSql, [userID_rider], (err, results) => {
+    connection.execute(getNumSeatSql, [postID], (err, results) => {
       if (err) {
         res.status(500).json({
           message: err.message,
@@ -465,26 +465,21 @@ app.post("/postRequest", (req, res) => {
           return;
         }
 
-        const insertSql =
-          "INSERT INTO seat (userID_rider, userID) VALUES (?, ?)";
+        const insertSql = "INSERT INTO seat (postID, userID) VALUES (?, ?)";
 
-        connection.execute(
-          insertSql,
-          [userID_rider, userID],
-          (err, results) => {
-            if (err) {
-              res.status(500).json({
-                message: err.message,
-              });
-              return;
-            }
-            res.status(200).json({
-              status: true,
-              message: "Success",
-              data: results,
+        connection.execute(insertSql, [postID, userID], (err, results) => {
+          if (err) {
+            res.status(500).json({
+              message: err.message,
             });
+            return;
           }
-        );
+          res.status(200).json({
+            status: true,
+            message: "Success",
+            data: results,
+          });
+        });
       });
     });
   });
