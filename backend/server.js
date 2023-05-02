@@ -122,10 +122,9 @@ app.post("/login", async (req, res) => {
 // endpoint: /login
 
 // /Settings
-app.put("/settings/:userID", async (req, res) => {
+app.put("/settings", async (req, res) => {
   try {
-    const { userID } = req.params;
-    const { name, tel, password } = req.body;
+    const { userID, name, tel, password, oldPassword } = req.body;
 
     const sqlSelect = "SELECT * FROM users WHERE userID = ?";
     connection.execute(sqlSelect, [userID], async (error, results) => {
@@ -144,6 +143,19 @@ app.put("/settings/:userID", async (req, res) => {
       }
 
       const user = results[0];
+
+      if (oldPassword !== undefined) {
+        const isOldPasswordValid = await bcrypt.compare(
+          oldPassword,
+          user.password
+        );
+        if (!isOldPasswordValid) {
+          return res.status(400).json({
+            status: false,
+            message: "Invalid old password",
+          });
+        }
+      }
 
       if (name !== undefined) {
         const sqlUpdateName = "UPDATE users SET name = ? WHERE userID = ?";
