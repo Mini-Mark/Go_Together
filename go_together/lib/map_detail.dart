@@ -29,7 +29,8 @@ class _MapDetailState extends State<MapDetail> {
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'postID': postID,
-            'userID': '2',
+            'userID': '20',
+            'seat': '0',
           }),
         );
       } catch (error) {

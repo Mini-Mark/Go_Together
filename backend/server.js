@@ -347,6 +347,8 @@ app.get("/userList", async (req, res) => {
       sql += ` WHERE post.locationDestination LIKE '%${locationDestination}%'`;
     }
 
+    console.log(sql);
+
     connection.query(sql, [locationDestination], (err, results) => {
       if (err) {
         res.status(500).json({
@@ -412,7 +414,7 @@ app.get("/getNotificationRider/:userID", (req, res) => {
 
 // /postRequest
 app.post("/postRequest", (req, res) => {
-  const { postID, userID } = req.body;
+  const { postID, userID, seat } = req.body;
 
   const checkSql =
     "SELECT COUNT(*) as num_riders FROM seat WHERE postID = ? AND status = 1";
@@ -427,7 +429,7 @@ app.post("/postRequest", (req, res) => {
 
     const numRiders = results[0].num_riders;
 
-    const getNumSeatSql = "SELECT seat FROM post WHERE userID = ?";
+    const getNumSeatSql = "SELECT seat FROM post WHERE postID = ?";
 
     connection.execute(getNumSeatSql, [postID], (err, results) => {
       if (err) {
@@ -437,6 +439,7 @@ app.post("/postRequest", (req, res) => {
         return;
       }
 
+      console.log(results);
       const numSeat = results[0].seat;
 
       if (numRiders >= numSeat) {
@@ -447,9 +450,9 @@ app.post("/postRequest", (req, res) => {
         return;
       }
 
-      const checkDuplicateSql = "SELECT * FROM seat WHERE userID = ?";
+      const checkDuplicateSql = "SELECT * FROM seat WHERE postID = ?";
 
-      connection.execute(checkDuplicateSql, [userID], (err, results) => {
+      connection.execute(checkDuplicateSql, [postID], (err, results) => {
         if (err) {
           res.status(500).json({
             message: err.message,
@@ -460,26 +463,31 @@ app.post("/postRequest", (req, res) => {
         if (results.length > 0) {
           res.status(400).json({
             status: false,
-            message: "Duplicate userID",
+            message: "Duplicate postID",
           });
           return;
         }
 
-        const insertSql = "INSERT INTO seat (postID, userID) VALUES (?, ?)";
+        const insertSql =
+          "INSERT INTO seat (postID, userID, seat) VALUES (?, ?, ?)";
 
-        connection.execute(insertSql, [postID, userID], (err, results) => {
-          if (err) {
-            res.status(500).json({
-              message: err.message,
+        connection.execute(
+          insertSql,
+          [postID, userID, seat],
+          (err, results) => {
+            if (err) {
+              res.status(500).json({
+                message: err.message,
+              });
+              return;
+            }
+            res.status(200).json({
+              status: true,
+              message: "Success",
+              data: results,
             });
-            return;
           }
-          res.status(200).json({
-            status: true,
-            message: "Success",
-            data: results,
-          });
-        });
+        );
       });
     });
   });
