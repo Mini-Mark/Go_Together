@@ -369,6 +369,33 @@ class _SettingState extends State<SettingPage> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Color(0xFF00F836)),
           ),
+        ),
+        Expanded(
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.only(bottom: 10),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                height: 40,
+                child: Text(
+                  "Logout",
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Color.fromARGB(255, 248, 0, 0)),
+              ),
+            ),
+          ),
         )
       ],
     );
