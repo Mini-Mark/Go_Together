@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 21;
 // get the client
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
@@ -12,10 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // create the connection to database
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "gotogetherapi",
+  host: "files.000webhost.com",
+  user: "gotogetherkmitl",
+  password: "WYMTf~vXn)6Kmfxw",
+  database: "id20693091_gotogetherapidb",
 });
 
 if (connection.connect) {
@@ -344,13 +344,15 @@ app.get("/userList", async (req, res) => {
       "SELECT post.*, users.*, COUNT(seat.postID) AS join_user " +
       "FROM post " +
       "JOIN users ON post.userID = users.userID " +
-      "LEFT JOIN seat ON seat.postID = users.userID ";
+      "LEFT JOIN seat ON seat.postID = post.postID ";
 
     if (locationDestination) {
       sql += `WHERE post.locationDestination LIKE '%${locationDestination}%' `;
     }
 
     sql += "GROUP BY post.postID";
+
+    console.log(sql);
 
     connection.query(sql, [locationDestination], (err, results) => {
       if (err) {
@@ -380,7 +382,7 @@ app.get("/postDetail/:postID", async (req, res) => {
   let sql = `SELECT post.*, users.*, COUNT(seat.postID) AS join_user
   FROM post 
   JOIN users ON post.userID = users.userID
-  LEFT JOIN seat ON seat.postID = users.userID `;
+  LEFT JOIN seat ON seat.postID = post.postID `;
 
   sql += "WHERE post.postID = ? ";
 
@@ -454,7 +456,7 @@ app.post("/postRequest", (req, res) => {
     console.log([numRiders]);
 
     const getNumSeatSql = "SELECT seat FROM post WHERE postID = ?";
-
+    console.log(1);
     connection.execute(getNumSeatSql, [postID], (err, results) => {
       if (err) {
         res.status(500).json({
@@ -462,6 +464,7 @@ app.post("/postRequest", (req, res) => {
         });
         return;
       }
+      console.log(2);
 
       const numSeat = results[0].seat;
       console.log(numRiders, numSeat);
@@ -473,6 +476,7 @@ app.post("/postRequest", (req, res) => {
         });
         return;
       }
+      console.log(3);
 
       const checkDuplicateSql = "SELECT * FROM seat WHERE userID = ?";
 
@@ -483,8 +487,9 @@ app.post("/postRequest", (req, res) => {
           });
           return;
         }
+        console.log(4);
 
-        if (results.length > 1) {
+        if (results.length >= 1) {
           res.status(400).json({
             status: false,
             message: "Duplicate userID",
