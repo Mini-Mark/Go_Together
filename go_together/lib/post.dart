@@ -108,7 +108,6 @@ class _PostState extends State<Post> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (widget.status) {
@@ -120,7 +119,10 @@ class _PostState extends State<Post> {
     _locationSourceController.text = globals.postData?["source"] ?? '';
     _locationDestinationController.text =
         globals.postData?["destination"] ?? '';
-    _seatController.text = globals.postData?["seat"] ?? '';
+    _seatController.text = "${globals.postData?["seat"] ?? ''}";
+    if(_seatController.text == "0"){
+      _seatController.text = "";
+    }
   }
 
   @override

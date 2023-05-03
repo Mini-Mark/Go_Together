@@ -22,10 +22,10 @@ class _NotificationState extends State<NotificationPage> {
 
   Future<List<dynamic>> fetchNotifications() async {
     final response = await http.get(Uri.parse(
-        'http://localhost:3000/getNotificationRider/${globals.isRiderOnlineData["postID"]}'));
+        'http://localhost:3000/getNotificationRider/${globals.postData["postID"]}'));
     if (response.statusCode == 200) {
-      print(json.decode(response.body)['data']);
-      print(globals.isRiderOnlineData);
+      // print(json.decode(response.body)['data']);
+      // print(globals.postData);
       return json.decode(response.body)['data'];
     } else {
       throw Exception('Failed to load notifications');
@@ -210,7 +210,6 @@ class _ListItemComponentState extends State<ListItemComponent> {
                   child: GestureDetector(
                     onTap: () {
                       _submitForm();
-                      
                     },
                     child: Container(
                       height: 30,
