@@ -102,6 +102,7 @@ class _ListState extends State<ListPage> {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
                 } else {
+                  // print(snapshot.data!.body);
                   if (json.decode(snapshot.data!.body)["data"].isEmpty) {
                     return Container();
                   } else {

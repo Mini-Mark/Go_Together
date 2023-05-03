@@ -47,6 +47,7 @@ class _NotificationState extends State<NotificationPage> {
                 notification['locationDestination'],
                 notification['name'],
                 notification['userID'],
+                notification['postID'],
               );
             },
           );
@@ -69,8 +70,9 @@ class ListItemComponent extends StatefulWidget {
   final String des;
   final String name;
   final int id;
+  final int postID;
 
-  ListItemComponent(this.source, this.des, this.name, this.id);
+  ListItemComponent(this.source, this.des, this.name, this.id, this.postID);
 
   @override
   State<ListItemComponent> createState() => _ListItemComponentState();
@@ -86,7 +88,7 @@ class _ListItemComponentState extends State<ListItemComponent> {
       Uri.parse('http://localhost:3000/riderRegister'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
-        "postID": "11",
+        "postID": "${this.widget.postID}",
         "userID": "${this.widget.id}",
         "status": "1",
       }),
@@ -98,7 +100,7 @@ class _ListItemComponentState extends State<ListItemComponent> {
       Uri.parse('http://localhost:3000/riderReject'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
-        "postID": "11",
+        "postID": "${this.widget.postID}",
         "userID": "${this.widget.id}",
         "status": "0",
       }),
