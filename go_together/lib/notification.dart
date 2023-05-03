@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 class NotificationPage extends StatefulWidget {
   @override
   _NotificationState createState() => _NotificationState();
@@ -19,10 +21,11 @@ class _NotificationState extends State<NotificationPage> {
   }
 
   Future<List<dynamic>> fetchNotifications() async {
-    final response = await http
-        .get(Uri.parse('http://localhost:3000/getNotificationRider/11'));
+    final response = await http.get(Uri.parse(
+        'http://localhost:3000/getNotificationRider/${globals.isRiderOnlineData["postID"]}'));
     if (response.statusCode == 200) {
       print(json.decode(response.body)['data']);
+      print(globals.isRiderOnlineData);
       return json.decode(response.body)['data'];
     } else {
       throw Exception('Failed to load notifications');
@@ -207,6 +210,7 @@ class _ListItemComponentState extends State<ListItemComponent> {
                   child: GestureDetector(
                     onTap: () {
                       _submitForm();
+                      
                     },
                     child: Container(
                       height: 30,
