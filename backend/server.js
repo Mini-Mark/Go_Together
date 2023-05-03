@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 21;
+const port = 3000;
 // get the client
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
