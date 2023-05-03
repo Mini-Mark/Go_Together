@@ -509,12 +509,12 @@ app.post("/postRequest", (req, res) => {
 
 // /riderAccept
 app.put("/riderAccept", (req, res) => {
-  const { userID_rider, userID, status } = req.body;
+  const { postID, userID, status } = req.body;
 
   const sql =
-    "UPDATE seat SET status = ? WHERE userID_rider = ? AND userID = ? AND status = '0'";
+    "UPDATE seat SET status = ? WHERE postID = ? AND userID = ? AND status = '0'";
 
-  connection.execute(sql, [status, userID_rider, userID], (err, results) => {
+  connection.execute(sql, [status, postID, userID], (err, results) => {
     if (err) {
       res.status(500).json({
         message: err.message,
@@ -538,3 +538,43 @@ app.put("/riderAccept", (req, res) => {
   });
 });
 // endpoint: /riderAccept
+
+// /riderReject
+app.delete("/riderReject", (req, res) => {
+  const { postID, userID, status } = req.body;
+
+  // Input validation
+  if (!postID || !userID || !status) {
+    return res.status(400).json({
+      message: "Missing required parameters",
+      success: false,
+    });
+  }
+
+  const sql =
+    "DELETE FROM seat WHERE postID = ? AND userID = ? AND status = '0'";
+
+  connection.execute(sql, [postID, userID], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({
+        message: "Internal server error",
+        success: false,
+      });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(400).json({
+        message: "No seat available for this user",
+        success: false,
+      });
+    }
+
+    res.status(200).json({
+      message: "Success",
+      success: true,
+    });
+  });
+});
+
+// endpoint: /riderReject
