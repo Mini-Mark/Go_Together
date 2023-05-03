@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 class MapDetail extends StatefulWidget {
   final int postID;
 
@@ -18,10 +20,12 @@ class _MapDetailState extends State<MapDetail> {
   String _errorMessage = '';
 
   Future<void> _submitForm() async {
+    globals.isJoinRider = true;
+    globals.isJoinRiderPostID = widget.postID;
+
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
-        jsonMap['data']?[0]?['join_user'] += 1;
       });
 
       try {
@@ -44,7 +48,7 @@ class _MapDetailState extends State<MapDetail> {
     }
   }
 
-  int button_step = 0;
+  int button_step = globals.isJoinRider ? 1 : 0;
 
   final int postID;
 
@@ -53,20 +57,30 @@ class _MapDetailState extends State<MapDetail> {
   @override
   void initState() {
     super.initState();
-    getAPI();
+    getAPI(globals.isJoinRiderPostID);
   }
 
   Map<String, dynamic> jsonMap = {};
 
   @override
-  Future<void> getAPI() async {
-    final response = await http.get(
-      Uri.parse('http://localhost:3000/postDetail/$postID'),
-      headers: {'Content-Type': 'application/json'},
-    );
-    setState(() {
-      jsonMap = json.decode(response.body);
-    });
+  Future<void> getAPI(int? defaultPostID) async {
+    if (globals.isJoinRider) {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/postDetail/$defaultPostID'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      setState(() {
+        jsonMap = json.decode(response.body);
+      });
+    } else {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/postDetail/$postID'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      setState(() {
+        jsonMap = json.decode(response.body);
+      });
+    }
   }
 
   @override
@@ -220,9 +234,12 @@ class _MapDetailState extends State<MapDetail> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
+                  if (button_step == 0) {
+                    jsonMap['data']?[0]?['join_user'] += 1;
+                    _submitForm();
+                  }
                   button_step = 1;
                 });
-                _submitForm();
               },
               child: Container(
                 alignment: Alignment.center,
@@ -237,11 +254,13 @@ class _MapDetailState extends State<MapDetail> {
                     "Waiting",
                     style: TextStyle(fontSize: 18),
                   )
-                ][button_step],
+                ][globals.isJoinRider ? 1 : button_step],
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                    [Color(0xFF00A8E8), Color(0xFFF8C100)][button_step]),
+                backgroundColor: MaterialStateProperty.all([
+                  Color(0xFF00A8E8),
+                  Color(0xFFF8C100)
+                ][globals.isJoinRider ? 1 : button_step]),
               ),
             )
           ],

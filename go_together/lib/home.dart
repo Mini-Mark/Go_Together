@@ -103,7 +103,10 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: [
               [
-                ListPage(setLeading: setLeading, setTitle: setTitle,page: 0),
+                ListPage(
+                    setLeading: setLeading,
+                    setTitle: setTitle,
+                    page: globals.isJoinRider ? 1 : 0),
                 null,
                 null,
                 SettingPage(),

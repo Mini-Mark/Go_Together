@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 21;
 // get the client
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
@@ -350,13 +350,13 @@ app.put("/riderClosePost/:userID", async (req, res) => {
 
 // /userList
 app.get("/userList", async (req, res) => {
-	try {
-		const { locationDestination } = req.query;
-		let sql =
-			"SELECT post.*, users.*, COUNT(seat.postID) AS join_user " +
-			"FROM post " +
-			"JOIN users ON post.userID = users.userID " +
-			"LEFT JOIN seat ON seat.postID = users.userID ";
+  try {
+    const { locationDestination } = req.query;
+    let sql =
+      "SELECT post.*, users.*, COUNT(seat.postID) AS join_user " +
+      "FROM post " +
+      "JOIN users ON post.userID = users.userID " +
+      "LEFT JOIN seat ON seat.postID = post.postID ";
 
 		if (locationDestination) {
 			sql += `WHERE post.locationDestination LIKE '%${locationDestination}%' `;
@@ -413,7 +413,7 @@ app.get("/postDetail/:postID", async (req, res) => {
 	let sql = `SELECT post.*, users.*, COUNT(seat.postID) AS join_user
   FROM post 
   JOIN users ON post.userID = users.userID
-  LEFT JOIN seat ON seat.postID = users.userID `;
+  LEFT JOIN seat ON seat.postID = post.postID `;
 
 	sql += "WHERE post.postID = ? ";
 
@@ -517,13 +517,13 @@ app.post("/postRequest", (req, res) => {
 					return;
 				}
 
-				if (results.length > 1) {
-					res.status(400).json({
-						status: false,
-						message: "Duplicate userID",
-					});
-					return;
-				}
+        if (results.length >= 1) {
+          res.status(400).json({
+            status: false,
+            message: "Duplicate userID",
+          });
+          return;
+        }
 
 				const insertSql =
 					"INSERT INTO seat (postID, userID, status) VALUES (?, ?, ?)";
