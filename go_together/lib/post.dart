@@ -136,6 +136,12 @@ class _PostState extends State<Post> {
                 TextFormField(
                   enabled: (button_step == 0),
                   controller: _locationSourceController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your locationSource.';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                       filled: !(button_step == 0),
                       fillColor:
@@ -172,6 +178,12 @@ class _PostState extends State<Post> {
                       child: TextFormField(
                         enabled: (button_step == 0),
                         controller: _locationDestinationController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your locationDestination.';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                             filled: !(button_step == 0),
                             fillColor: (button_step == 0)
@@ -209,6 +221,12 @@ class _PostState extends State<Post> {
                         keyboardType: TextInputType.number,
                         enabled: (button_step == 0),
                         controller: _seatController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your seat.';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                             filled: !(button_step == 0),
                             fillColor: (button_step == 0)
@@ -259,19 +277,25 @@ class _PostState extends State<Post> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  button_step = (button_step == 1 ? 0 : 1);
-                });
+                if (!(_locationDestinationController.text.isEmpty ||
+                    _locationSourceController.text.isEmpty ||
+                    _seatController.text.isEmpty)) {
+                  setState(() {
+                    button_step = (button_step == 1 ? 0 : 1);
+                  });
 
-                widget.toggleRiderStatus();
-                if (button_step == 0) {
-                  _status = 'False';
-                  globals.isRiderOnline = false;
-                  _submitForm();
+                  widget.toggleRiderStatus();
+                  if (button_step == 0) {
+                    _status = 'False';
+                    globals.isRiderOnline = false;
+                    _submitForm();
+                  } else {
+                    _status = 'True';
+                    globals.isRiderOnline = true;
+                    _submitForm();
+                  }
                 } else {
-                  _status = 'True';
-                  globals.isRiderOnline = true;
-                  _submitForm();
+                  _formKey.currentState!.validate();
                 }
               },
               child: Container(
