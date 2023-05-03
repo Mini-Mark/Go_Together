@@ -21,6 +21,7 @@ class _MapDetailState extends State<MapDetail> {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
+        jsonMap['data']?[0]?['join_user'] += 1;
       });
 
       try {
@@ -202,7 +203,8 @@ class _MapDetailState extends State<MapDetail> {
                                     color: Colors.black87,
                                   ),
                                   SizedBox(width: 10),
-                                  Text("${jsonMap['data']?[0]?['seat'] ?? ''}"),
+                                  Text(
+                                      "${jsonMap['data']?[0]?['join_user'] ?? ''} / ${jsonMap['data']?[0]?['seat'] ?? ''}"),
                                 ],
                               ),
                             ],

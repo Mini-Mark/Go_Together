@@ -4,6 +4,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ListPage extends StatefulWidget {
+  Function setLeading;
+  Function setTitle;
+
+  int page;
+
+  ListPage(
+      {required this.setLeading, required this.setTitle, required this.page});
+
   @override
   _ListState createState() => _ListState();
 }
@@ -20,11 +28,22 @@ class _ListState extends State<ListPage> {
 
   int _postID = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _currentPage = widget.page;
+  }
+
   changePage(int pg, int postID) {
     setState(() {
       _currentPage = pg;
       _postID = postID;
     });
+
+    if (pg == 1) {
+      widget.setLeading(true);
+      widget.setTitle("Detail");
+    }
   }
 
   Future<void> _submitForm() async {
@@ -95,12 +114,17 @@ class _ListState extends State<ListPage> {
                         var item = data[index];
                         return Column(
                           children: [
-                            ListItemComponent(
-                              item["locationSource"],
-                              item["locationDestination"],
-                              item["postID"],
-                              () => changePage(1, item["postID"]),
-                            ),
+                            (item["join_user"] >= item["seat"])
+                                ? Container()
+                                : ListItemComponent(
+                                    item["locationSource"],
+                                    item["locationDestination"],
+                                    item["postID"],
+                                    () => changePage(1, item["postID"]),
+                                    item["name"],
+                                    item["tel"],
+                                    item["seat"],
+                                    item["join_user"]),
                             SizedBox(height: 10),
                           ],
                         );
@@ -123,9 +147,16 @@ class ListItemComponent extends StatelessWidget {
   final String des;
   final int postID;
 
+  final String name;
+  final String tel;
+  final int seat;
+
   final Function page;
 
-  ListItemComponent(this.source, this.des, this.postID, this.page);
+  final int join_user;
+
+  ListItemComponent(this.source, this.des, this.postID, this.page, this.name,
+      this.tel, this.seat, this.join_user);
 
   @override
   Widget build(BuildContext context) {
@@ -230,8 +261,8 @@ class ListItemComponent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Mon"),
-                      Text("081-2345678"),
+                      Text("${name}"),
+                      Text("${tel}"),
                     ],
                   ),
                   Expanded(
@@ -244,7 +275,7 @@ class ListItemComponent extends StatelessWidget {
                         color: Colors.black87,
                       ),
                       SizedBox(width: 10),
-                      Text("0 / 4"),
+                      Text("${join_user} / ${seat}"),
                     ],
                   )),
                 ],

@@ -38,7 +38,7 @@ class _RiderRegisterState extends State<RiderRegisterPage> {
           Uri.parse('http://localhost:3000/riderRegister'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
-            "userID": "2",
+            "userID": globals.userData["data"]["userID"],
             "brand": _brandController.text,
             "model": _modelController.text,
             "color": _colorController.text,
@@ -59,7 +59,7 @@ class _RiderRegisterState extends State<RiderRegisterPage> {
           globals.userData["data"]["drivingLicense"] = "drivingLicense.png";
           globals.userData["data"]["carImage"] = "carImage.png";
           globals.userData["data"]["carLicense"] = "carLicense.png";
-          
+
           showDialog(
             context: context,
             builder: (BuildContext context) {
