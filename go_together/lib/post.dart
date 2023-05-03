@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 class Post extends StatefulWidget {
   final Function toggleRiderStatus;
   final bool status;
@@ -41,6 +43,12 @@ class _PostState extends State<Post> {
             "online": "${_status}"
           }),
         );
+
+        globals.postData = {
+          "source": _locationSourceController.text,
+          "destination": _locationDestinationController.text,
+          "seat": _seatController.text
+        };
 
         Map<String, dynamic> jsonMap = json.decode(response.body);
         print(jsonMap['status']);
@@ -106,6 +114,11 @@ class _PostState extends State<Post> {
     } else {
       button_step = 0;
     }
+
+    _locationSourceController.text = globals.postData?["source"] ?? '';
+    _locationDestinationController.text =
+        globals.postData?["destination"] ?? '';
+    _seatController.text = globals.postData?["seat"] ?? '';
   }
 
   @override
@@ -119,8 +132,12 @@ class _PostState extends State<Post> {
             Column(
               children: [
                 TextFormField(
+                  enabled: (button_step == 0),
                   controller: _locationSourceController,
                   decoration: InputDecoration(
+                      filled: !(button_step == 0),
+                      fillColor:
+                          (button_step == 0) ? Colors.white : Colors.black12,
                       focusedBorder: OutlineInputBorder(),
                       border: OutlineInputBorder(),
                       label: Row(
@@ -151,8 +168,13 @@ class _PostState extends State<Post> {
                     Flexible(
                       flex: 2,
                       child: TextFormField(
+                        enabled: (button_step == 0),
                         controller: _locationDestinationController,
                         decoration: InputDecoration(
+                            filled: !(button_step == 0),
+                            fillColor: (button_step == 0)
+                                ? Colors.white
+                                : Colors.black12,
                             focusedBorder: OutlineInputBorder(),
                             border: OutlineInputBorder(),
                             label: Row(
@@ -182,8 +204,14 @@ class _PostState extends State<Post> {
                     Flexible(
                       flex: 1,
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        enabled: (button_step == 0),
                         controller: _seatController,
                         decoration: InputDecoration(
+                            filled: !(button_step == 0),
+                            fillColor: (button_step == 0)
+                                ? Colors.white
+                                : Colors.black12,
                             focusedBorder: OutlineInputBorder(),
                             border: OutlineInputBorder(),
                             label: Row(

@@ -22,8 +22,6 @@ class _HomeState extends State<Home> {
   String title = "List";
   bool backButton = false;
 
-  late Function backLeadingFunc;
-
   toggleRiderStatus() {
     setState(() {
       rider_isOnline = !rider_isOnline;
@@ -37,33 +35,41 @@ class _HomeState extends State<Home> {
         switch (currentPage) {
           case 0:
             setTitle("List");
+            setLeading(false);
             break;
           case 1:
             setTitle("History");
+            setLeading(false);
             break;
           case 2:
             setTitle("Notification");
+            setLeading(false);
             break;
           case 3:
             setTitle("Settings");
+            setLeading(false);
             break;
           default:
         }
       } else {
         switch (currentPage) {
           case 0:
+            setLeading(false);
             globals.userData["data"]["drivingLicense"] != null
                 ? setTitle("Post")
                 : setTitle("Rider Register");
             break;
           case 1:
             setTitle("History");
+            setLeading(false);
             break;
           case 2:
             setTitle("Notification");
+            setLeading(false);
             break;
           case 3:
             setTitle("Settings");
+            setLeading(false);
             break;
           default:
         }
@@ -77,8 +83,10 @@ class _HomeState extends State<Home> {
     });
   }
 
-  backLeading() {
-    backLeadingFunc();
+  setLeading(bool status) {
+    // setState(() {
+    //   backButton = status;
+    // });
   }
 
   void toggleRole() {
@@ -95,7 +103,7 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: [
               [
-                ListPage(),
+                ListPage(setLeading: setLeading, setTitle: setTitle,page: 0),
                 null,
                 null,
                 SettingPage(),
