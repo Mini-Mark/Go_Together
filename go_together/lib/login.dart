@@ -61,8 +61,10 @@ class _LoginState extends State<Login> {
           Map<String, dynamic> checkRiderStatus =
               json.decode(response_checkRiderStatus.body);
           if (checkRiderStatus["message"] == "Success") {
+            globals.isRiderOnlineData = checkRiderStatus["data"];
             globals.isRiderOnline = (checkRiderStatus["status"] == "True");
           } else {
+            globals.isRiderOnlineData = null;
             globals.isRiderOnline = false;
           }
 

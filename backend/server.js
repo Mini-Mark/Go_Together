@@ -415,7 +415,8 @@ app.get("/postStatus/:user_id", async (req, res) => {
 // riderStatus
 app.get("/riderStatus/:user_id", async (req, res) => {
 	const { user_id } = req.params;
-	let sql = "SELECT online FROM post WHERE userID = ?";
+	let sql =
+		"SELECT online,locationSource,locationDestination,seat FROM post WHERE userID = ?";
 	connection.query(sql, [user_id], (err, results) => {
 		if (err) {
 			res.status(500).json({
@@ -432,6 +433,11 @@ app.get("/riderStatus/:user_id", async (req, res) => {
 			res.status(200).json({
 				message: "Success",
 				status: results[0]["online"],
+				data: {
+					source: results[0]["locationSource"],
+					destination: results[0]["locationDestination"],
+					seat: results[0]["seat"],
+				},
 			});
 		}
 	});
