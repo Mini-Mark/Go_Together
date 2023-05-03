@@ -39,6 +39,33 @@ class _LoginState extends State<Login> {
           // Login successful, navigate to home screen
           globals.isLoggedIn = true;
           globals.userData = jsonMap;
+
+          final response_checkJoinRider = await http.get(
+            Uri.parse(
+                "http://localhost:3000/postStatus/${jsonMap["data"]["userID"]}"),
+          );
+          Map<String, dynamic> checkJoinRider =
+              json.decode(response_checkJoinRider.body);
+          if (checkJoinRider["message"] == "Success") {
+            globals.isJoinRider = true;
+            globals.isJoinRiderPostID = checkJoinRider["postID"];
+          } else {
+            globals.isJoinRider = false;
+            globals.isJoinRiderPostID = null;
+          }
+
+          final response_checkRiderStatus = await http.get(
+            Uri.parse(
+                "http://localhost:3000/riderStatus/${jsonMap["data"]["userID"]}"),
+          );
+          Map<String, dynamic> checkRiderStatus =
+              json.decode(response_checkRiderStatus.body);
+          if (checkRiderStatus["message"] == "Success") {
+            globals.isRiderOnline = (checkRiderStatus["status"] == "True");
+          } else {
+            globals.isRiderOnline = false;
+          }
+
           Navigator.pushNamed(context, '/home');
         } else {
           // Login failed, display error message

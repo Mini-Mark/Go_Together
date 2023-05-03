@@ -16,8 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool rider_isOnline = false;
-  bool role = false;
+  bool rider_isOnline = globals.isRiderOnline;
+  bool role = globals.isRiderOnline;
   int currentPage = 0;
   String title = "List";
   bool backButton = false;
@@ -139,43 +139,49 @@ class _HomeState extends State<Home> {
                   fontSize: 26,
                   color: Colors.black87)),
           actions: [
-            Container(
-              padding: EdgeInsets.only(right: 10),
-              child: Row(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          this.role
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 3),
-                                  child: Icon(
-                                    Icons.circle,
-                                    size: 10,
-                                    color: rider_isOnline
-                                        ? Color(0xFF4EFF55)
-                                        : Colors.red,
-                                  ),
-                                )
-                              : Container(),
-                          SizedBox(width: 7),
-                          Text(this.role ? "rider" : "user",
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 18,
-                              )),
-                        ],
-                      )),
-                  CupertinoSwitch(
-                      trackColor: Colors.grey,
-                      activeColor: Colors.black,
-                      value: role,
-                      onChanged: (e) => {toggleRole()})
-                ],
+            [
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                child: Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            this.role
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 3),
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 10,
+                                      color: rider_isOnline
+                                          ? Color(0xFF4EFF55)
+                                          : Colors.red,
+                                    ),
+                                  )
+                                : Container(),
+                            SizedBox(width: 7),
+                            Text(this.role ? "rider" : "user",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 18,
+                                )),
+                          ],
+                        )),
+                    [
+                      CupertinoSwitch(
+                          trackColor: Colors.grey,
+                          activeColor: Colors.black,
+                          value: role,
+                          onChanged: (e) => {toggleRole()}),
+                      Container()
+                    ][rider_isOnline ? 1 : 0]
+                  ],
+                ),
               ),
-            )
+              Container()
+            ][globals.isJoinRider ? 1 : 0]
           ],
         ),
         bottomNavigationBar: Container(

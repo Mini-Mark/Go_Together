@@ -60,7 +60,7 @@ class _SettingState extends State<SettingPage> {
             Uri.parse('http://localhost:3000/settings'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
-              'userID': '2',
+              'userID': globals.userData["data"]["userID"],
               'name': _nameController.text,
               'tel': _telController.text,
               'oldPassword': _oldPasswordController.text,

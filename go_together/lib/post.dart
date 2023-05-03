@@ -27,6 +27,8 @@ class _PostState extends State<Post> {
   String _errorMessage = '';
 
   Future<void> _submitForm() async {
+    print(globals.isRiderOnline);
+
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -36,7 +38,7 @@ class _PostState extends State<Post> {
           Uri.parse('http://localhost:3000/riderPost'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
-            "userID": "5",
+            "userID": globals.userData["data"]["userID"],
             "locationSource": _locationSourceController.text,
             "locationDestination": _locationDestinationController.text,
             "seat": _seatController.text,
@@ -51,7 +53,7 @@ class _PostState extends State<Post> {
         };
 
         Map<String, dynamic> jsonMap = json.decode(response.body);
-        print(jsonMap['status']);
+
         if (jsonMap['status'] == true) {
           // Registration successful, navigate to home screen
           showDialog(
@@ -263,10 +265,12 @@ class _PostState extends State<Post> {
 
                 widget.toggleRiderStatus();
                 if (button_step == 0) {
-                  _status = 'True';
+                  _status = 'False';
+                  globals.isRiderOnline = false;
                   _submitForm();
                 } else {
-                  _status = 'False';
+                  _status = 'True';
+                  globals.isRiderOnline = true;
                   _submitForm();
                 }
               },

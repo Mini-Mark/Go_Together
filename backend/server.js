@@ -350,13 +350,13 @@ app.put("/riderClosePost/:userID", async (req, res) => {
 
 // /userList
 app.get("/userList", async (req, res) => {
-  try {
-    const { locationDestination } = req.query;
-    let sql =
-      "SELECT post.*, users.*, COUNT(seat.postID) AS join_user " +
-      "FROM post " +
-      "JOIN users ON post.userID = users.userID " +
-      "LEFT JOIN seat ON seat.postID = post.postID ";
+	try {
+		const { locationDestination } = req.query;
+		let sql =
+			"SELECT post.*, users.*, COUNT(seat.postID) AS join_user " +
+			"FROM post " +
+			"JOIN users ON post.userID = users.userID " +
+			"LEFT JOIN seat ON seat.postID = post.postID ";
 
 		if (locationDestination) {
 			sql += `WHERE post.locationDestination LIKE '%${locationDestination}%' `;
@@ -397,11 +397,43 @@ app.get("/postStatus/:user_id", async (req, res) => {
 			});
 			return;
 		}
-		res.status(200).json({
-			message: "Success",
-			postID: parseInt(results[0]["postID"]),
-			status: parseInt(results[0]["status"]),
-		});
+
+		if (results.length != 1) {
+			res.status(200).json({
+				message: "Failed",
+			});
+		} else {
+			res.status(200).json({
+				message: "Success",
+				postID: parseInt(results[0]["postID"]),
+				status: parseInt(results[0]["status"]),
+			});
+		}
+	});
+});
+
+// riderStatus
+app.get("/riderStatus/:user_id", async (req, res) => {
+	const { user_id } = req.params;
+	let sql = "SELECT online FROM post WHERE userID = ?";
+	connection.query(sql, [user_id], (err, results) => {
+		if (err) {
+			res.status(500).json({
+				message: err.message,
+			});
+			return;
+		}
+
+		if (results.length != 1) {
+			res.status(200).json({
+				message: "Failed",
+			});
+		} else {
+			res.status(200).json({
+				message: "Success",
+				status: results[0]["online"],
+			});
+		}
 	});
 });
 
@@ -517,13 +549,13 @@ app.post("/postRequest", (req, res) => {
 					return;
 				}
 
-        if (results.length >= 1) {
-          res.status(400).json({
-            status: false,
-            message: "Duplicate userID",
-          });
-          return;
-        }
+				if (results.length >= 1) {
+					res.status(400).json({
+						status: false,
+						message: "Duplicate userID",
+					});
+					return;
+				}
 
 				const insertSql =
 					"INSERT INTO seat (postID, userID, status) VALUES (?, ?, ?)";

@@ -7,3 +7,5 @@ dynamic? postData;
 
 bool isJoinRider = false;
 int? isJoinRiderPostID;
+
+bool isRiderOnline = false;

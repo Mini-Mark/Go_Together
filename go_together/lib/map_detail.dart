@@ -34,7 +34,7 @@ class _MapDetailState extends State<MapDetail> {
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'postID': postID,
-            'userID': '20',
+            'userID': globals.userData["data"]["userID"],
             'status': '0',
           }),
         );
@@ -57,24 +57,27 @@ class _MapDetailState extends State<MapDetail> {
   @override
   void initState() {
     super.initState();
-    getAPI(globals.isJoinRiderPostID);
+    getAPI();
   }
 
   Map<String, dynamic> jsonMap = {};
 
   @override
-  Future<void> getAPI(int? defaultPostID) async {
+  Future<void> getAPI() async {
     if (globals.isJoinRider) {
       final response = await http.get(
-        Uri.parse('http://localhost:3000/postDetail/$defaultPostID'),
+        Uri.parse(
+            'http://localhost:3000/postDetail/${globals.isJoinRiderPostID}'),
         headers: {'Content-Type': 'application/json'},
       );
       setState(() {
         jsonMap = json.decode(response.body);
       });
+
+      print(jsonMap);
     } else {
       final response = await http.get(
-        Uri.parse('http://localhost:3000/postDetail/$postID'),
+        Uri.parse('http://localhost:3000/postDetail/${postID}'),
         headers: {'Content-Type': 'application/json'},
       );
       setState(() {
@@ -115,7 +118,7 @@ class _MapDetailState extends State<MapDetail> {
                               SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                    jsonMap?['data']?[0]?.isNotEmpty == true
+                                    jsonMap['data']?[0]?.isNotEmpty == true
                                         ? jsonMap['data'][0]['locationSource']
                                         : ''),
                               )
