@@ -16,6 +16,8 @@ class MapDetail extends StatefulWidget {
 class _MapDetailState extends State<MapDetail> {
   final _formKey = GlobalKey<FormState>();
 
+  bool bigButton = false;
+
   bool _isLoading = false;
   String _errorMessage = '';
 
@@ -74,7 +76,11 @@ class _MapDetailState extends State<MapDetail> {
         jsonMap = json.decode(response.body);
       });
 
-      print(jsonMap);
+      print(jsonMap["data"][0]["UserStatus"]);
+      if (jsonMap["data"][0]["UserStatus"] == "1") {
+        bigButton = true;
+        print(bigButton);
+      }
     } else {
       final response = await http.get(
         Uri.parse('http://localhost:3000/postDetail/${postID}'),
@@ -256,14 +262,19 @@ class _MapDetailState extends State<MapDetail> {
                   Text(
                     "Waiting",
                     style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    "Rider Accepted",
+                    style: TextStyle(fontSize: 18),
                   )
-                ][globals.isJoinRider ? 1 : button_step],
+                ][bigButton? 2 : globals.isJoinRider ? 1 : button_step],
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all([
                   Color(0xFF00A8E8),
-                  Color(0xFFF8C100)
-                ][globals.isJoinRider ? 1 : button_step]),
+                  Color(0xFFF8C100),
+                  Color.fromARGB(255, 60, 255, 0)
+                ][bigButton? 2 : globals.isJoinRider ? 1 : button_step]),
               ),
             )
           ],

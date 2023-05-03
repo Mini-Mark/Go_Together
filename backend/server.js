@@ -208,6 +208,7 @@ app.put("/riderRegister", async (req, res) => {
 
   let sql =
     "UPDATE users SET brand = ?, model = ?, color = ?, licenseNo = ?, drivingLicense = ?, carImage = ?, carLicense = ? WHERE userID = ?";
+    
   connection.execute(
     sql,
     [
@@ -438,7 +439,7 @@ app.get("/riderStatus/:user_id", async (req, res) => {
 // PostDetail
 app.get("/postDetail/:postID", async (req, res) => {
   const { postID } = req.params;
-  let sql = `SELECT post.*, users.*, COUNT(seat.postID) AS join_user
+  let sql = `SELECT post.*, users.*, COUNT(seat.postID) AS join_user, seat.status as "UserStatus" 
   FROM post 
   JOIN users ON post.userID = users.userID
   LEFT JOIN seat ON seat.postID = post.postID `;
@@ -449,6 +450,7 @@ app.get("/postDetail/:postID", async (req, res) => {
 
   connection.query(sql, [postID], (err, posts) => {
     console.log(posts);
+    console.log(sql);
 
     if (err) {
       res.status(500).json({

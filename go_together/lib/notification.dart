@@ -87,8 +87,9 @@ class _ListItemComponentState extends State<ListItemComponent> {
   int hidden = 0;
 
   Future<void> _submitForm() async {
+    print(1);
     final response = await http.put(
-      Uri.parse('http://localhost:3000/riderRegister'),
+      Uri.parse('http://localhost:3000/riderAccept'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         "postID": "${this.widget.postID}",
@@ -210,6 +211,10 @@ class _ListItemComponentState extends State<ListItemComponent> {
                   child: GestureDetector(
                     onTap: () {
                       _submitForm();
+
+                      setState(() {
+                        hidden = 1;
+                      });
                     },
                     child: Container(
                       height: 30,
