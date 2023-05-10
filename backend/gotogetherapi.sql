@@ -53,7 +53,7 @@ INSERT INTO `post` (`postID`, `locationSource`, `locationDestination`, `seat`, `
 
 CREATE TABLE `seat` (
   `ID` int(11) NOT NULL,
-  `userID_rider` int(2) NOT NULL,
+  `postID` int(2) NOT NULL,
   `userID` int(2) NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -62,7 +62,7 @@ CREATE TABLE `seat` (
 -- Dumping data for table `seat`
 --
 
-INSERT INTO `seat` (`ID`, `userID_rider`, `userID`, `status`) VALUES
+INSERT INTO `seat` (`ID`, `postID`, `userID`, `status`) VALUES
 (4, 3, 2, '1'),
 (5, 3, 1, '1'),
 (6, 3, 4, '1'),
