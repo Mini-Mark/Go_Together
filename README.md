@@ -24,6 +24,12 @@ Go Together is designed to streamline the process of coordinating rides among us
 
 - **Google Maps API:**
   - Integrates Google Maps for navigation and location-based services.
+ 
+- **Express.js:**
+  - A web application framework for Node.js, providing a robust set of features for web and mobile applications.
+
+- **MySQL:**
+  - A relational database management system for data storage.
 
 ## Installation
 
